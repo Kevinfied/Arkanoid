@@ -1,36 +1,54 @@
+import java.awt.*;
+
 public class Paddle {
+	int x,y;
+	int up, down;
+    int left, right;
+    int speed;
+    int WIDTH = Globals.WIDTH;
+    int HEIGHT = Globals.HEIGHT;
 
-    private int x, y;
-    private int width, height;
+    int paddleWidth = 80;
+    int paddleHeight = 20;
 
-
-    public Paddle(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Paddle(int l, int r, int s) { 
+        x = WIDTH/2 - 40;
+        y = HEIGHT - 100;
+        left = l;
+        right = r;
+        this.speed = s;
     }
 
-    public void moveLeft() {
-        x -= 5;
+    
+    public void draw(Graphics g){
+    	g.setColor(Color.RED);
+    	g.fillRect(x,y,paddleWidth,paddleHeight);
+    }
+    
+    public void moveLeft(){
+        x -= speed;
     }
 
-    public void moveRight() {
-        x += 5;
+    public void moveRight(){
+        x += speed;
     }
-
-    public void moveUp() {
-        y -= 5;
-    }
-
 
     public void move(boolean []keys) {
-        if (keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_A]) {
+        if (keys[left]) {
             moveLeft();
         }
-
-        if (keys[KeyEvent.])
-
-
+        if (keys[right]) {
+            moveRight();
+        }
     }
 
-
+    public Rectangle getRect(){
+        // x, y, width, height
+    	return new Rectangle(x,y,paddleWidth,paddleHeight);
+    }
+    
+    
 }
+
+
+

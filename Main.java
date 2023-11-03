@@ -1,12 +1,9 @@
-import java.util.*;
 import java.awt.*;
-
-import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.*;
 
-
-public class Main extends JFrame{
-    GamePanel game = new GamePanel();
+public class Main extends JFrame {
+    GamePanel game= new GamePanel();
 
     public Main() {
         super("Arkanoid");
@@ -14,18 +11,12 @@ public class Main extends JFrame{
         add(game);
         pack();
         setVisible(true);
-
     }
-
-
-    public static void main(String[] arguments) {
-
-        Main frame = new Main();
-
-
-    }
-
-
     
+    public static void main(String[] arguments) {
+        Main frame = new Main();		
+    }
 }
+
+
 
