@@ -1,12 +1,12 @@
 import java.awt.*;
 
 public class Ball {
-	int x,y,vx,vy;
-    int WIDTH = Globals.WIDTH;
-    int HEIGHT = Globals.HEIGHT;
+	private static int x,y,vx,vy;
+//    int WIDTH = Globals.SCREEN_WIDTH;
+//    int HEIGHT = Globals.SCREEN_HEIGHT;
     public Ball() {
-    	x = WIDTH/2;
-    	y = HEIGHT/2;
+    	x = Globals.SCREEN_WIDTH/2;
+    	y = Globals.SCREEN_HEIGHT/2;
     	// if(Util.randint(0,1)==0){
     	// 	vx = Util.randint(-5, -7);
     	// }
@@ -21,37 +21,32 @@ public class Ball {
     	// else{
     	// 	vy = Util.randint(19, 20);
     	// }
-        vx = 5;
-        vy = 10000;
+        vx = 10;
+        vy = 10;
     }
     
     public int move(Paddle play){
 		// moving
-        System.our.println(vy, vx);
-    	x+=vx;
-    	y+=vy;
-        int WIDTH = Globals.WIDTH;
-        int HEIGHT = Globals.HEIGHT;
+				this.x += vx;
+				this.y += vy;
 
-    	if(y<0 || y>HEIGHT){ // bounces off the top and bottom walls. 
-    		vy*=-1;
-    	}
+		    	if(y<0 || y>Globals.SCREEN_HEIGHT){ // bounces off the top and bottom walls.
+		    		vy*=-1;
+		    	}
 
+		        if(x<0 || x>Globals.SCREEN_WIDTH){ // bounces off the left and right walls.
+		    		vx*=-1;
+		    	}
 
-    	Rectangle r = getRect();
+		    	Rectangle r = getRect();
 
 		// bouncing off paddles
     	if(r.intersects(play.getRect())){
+			System.out.println("BOUNCE");
+
     		vy *= -1;
     	}
 
-        // bouncing off the walls
-    	if(x<0){
-    		vx*=-1;
-    	}
-    	if(x>WIDTH){
-    		vx*=-1;
-    	}
 		
     	return 0;
     }
@@ -67,6 +62,22 @@ public class Ball {
     	g.setColor(Color.RED);
     	g.fillOval(x-3,y-3,6,6);
     }
-    
+
+	public static int getX() {
+		return x;
+	}
+
+	public static int getY() {
+		return y;
+	}
+
+	public static int getVelX() {
+		return vx;
+	}
+
+	public static int getVelY() {
+		return vy;
+	}
+
 }
 

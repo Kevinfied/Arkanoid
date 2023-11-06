@@ -19,7 +19,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         // int HEIGHT = 800;
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         screen = "intro";
-        back = new ImageIcon("intro.png").getImage();
+        back = new ImageIcon("background.png").getImage();
         keys = new boolean[KeyEvent.KEY_LAST+1];
         ball = new Ball();
         // score1 = 0;
@@ -34,7 +34,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         addMouseListener(this);
         timer = new Timer(20, this);
         timer.start();
-        setPreferredSize(new Dimension(Globals.WIDTH, Globals.HEIGHT));
+        setPreferredSize(new Dimension(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
     }
     
     public void move(){
@@ -70,9 +70,13 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     public void	keyTyped(KeyEvent e){
     }
 
-    public void	mouseClicked(MouseEvent e){}
+    public void	mouseClicked(MouseEvent e){
 
-    public void	mouseEntered(MouseEvent e){}
+    }
+
+    public void	mouseEntered(MouseEvent e){
+
+    }
 
     public void	mouseExited(MouseEvent e){}
 
@@ -93,8 +97,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     
     @Override
     public void paint(Graphics g){
-        int WIDTH = Globals.WIDTH;
-        int HEIGHT = Globals.HEIGHT;
 
         if(screen == "intro"){
             g.drawImage(back,0,0,null);		
@@ -102,7 +104,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
         else if(screen == "main"){
             g.setColor(new Color(0,0,0));
-            g.fillRect(0,0,WIDTH,HEIGHT);
+            g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
 
             ball.draw(g);
             // player1.draw(g);

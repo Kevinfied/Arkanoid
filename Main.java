@@ -12,9 +12,12 @@ public class Main extends JFrame {
         pack();
         setVisible(true);
     }
+
+
     
     public static void main(String[] arguments) {
-        Main frame = new Main();		
+        Main frame = new Main();
+        System.out.println("HI");		
     }
 }
 

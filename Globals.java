@@ -1,7 +1,7 @@
 class Globals {
 
-    public static int WIDTH = 600;
-    public static int HEIGHT = 800;
+    public static int SCREEN_WIDTH = 600;
+    public static int SCREEN_HEIGHT = 800;
 
 
 

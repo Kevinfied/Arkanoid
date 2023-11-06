@@ -5,8 +5,8 @@ public class Paddle {
 	int up, down;
     int left, right;
     int speed;
-    int WIDTH = Globals.WIDTH;
-    int HEIGHT = Globals.HEIGHT;
+    int WIDTH = Globals.SCREEN_WIDTH;
+    int HEIGHT = Globals.SCREEN_HEIGHT;
 
     int paddleWidth = 80;
     int paddleHeight = 20;
@@ -34,12 +34,19 @@ public class Paddle {
     }
 
     public void move(boolean []keys) {
-        if (keys[left]) {
+
+        // if in screen
+
+                        // makes sure the paddle does not
+                        // go off the screen
+        if (keys[left] && (x - (speed/2) > 0)) {
             moveLeft();
         }
-        if (keys[right]) {
+        if (keys[right] && (x + (speed/2) < WIDTH - paddleWidth)) {
             moveRight();
         }
+
+
     }
 
     public Rectangle getRect(){
