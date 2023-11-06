@@ -1,9 +1,15 @@
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class Ball {
 	private static int x,y,vx,vy;
 //    int WIDTH = Globals.SCREEN_WIDTH;
 //    int HEIGHT = Globals.SCREEN_HEIGHT;
+
+	// border is 27 pixels wide
+
+	Image ball = new ImageIcon("vaus.png").getImage();
     public Ball() {
     	x = Globals.SCREEN_WIDTH/2;
     	y = Globals.SCREEN_HEIGHT/2;
@@ -59,8 +65,11 @@ public class Ball {
 
     // draws the ball
     public void draw(Graphics g){
-    	g.setColor(Color.RED);
-    	g.fillOval(x-3,y-3,6,6);
+//    	g.setColor(Color.RED);
+//    	g.fillOval(x-3,y-3,6,6);
+
+		g.drawImage(ball, x, y, null);
+
     }
 
 	public static int getX() {

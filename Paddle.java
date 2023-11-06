@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class Paddle {
 	int x,y;
@@ -8,6 +10,7 @@ public class Paddle {
     int WIDTH = Globals.SCREEN_WIDTH;
     int HEIGHT = Globals.SCREEN_HEIGHT;
 
+    Image vaus = new ImageIcon("vaus.png").getImage();
     int paddleWidth = 80;
     int paddleHeight = 20;
 
@@ -21,9 +24,13 @@ public class Paddle {
 
     
     public void draw(Graphics g){
-    	g.setColor(Color.RED);
-    	g.fillRect(x,y,paddleWidth,paddleHeight);
+//    	g.setColor(Color.RED);
+//    	g.fillRect(x,y,paddleWidth,paddleHeight);
+
+        g.drawImage(vaus, x, y, null);
+
     }
+
     
     public void moveLeft(){
         x -= speed;
