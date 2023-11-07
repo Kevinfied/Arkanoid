@@ -29,7 +29,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
 
         //                  left key          right key         paddle speed
-        player = new Paddle(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 20);
+        player = new Paddle(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 10);
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
@@ -109,14 +109,12 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         else if(screen == "main"){
 //            g.setColor(new Color(0,0,0));
 //            g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
+            g.setColor(new Color(0,0,0));
+            g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.drawImage(background, 0, 0, null);
             ball.draw(g);
-            // player1.draw(g);
-            // player2.draw(g);
             player.draw(g);
             g.setFont(fontSys);
-            // g.drawString(""+score1, 100,50);
-            // g.drawString(""+score2, 670,50);
         }
     }
 }

@@ -6,13 +6,14 @@ public class Paddle {
 	int x,y;
 	int up, down;
     int left, right;
+    public int width = 80;
+    public int height = 20;
     int speed;
     int WIDTH = Globals.SCREEN_WIDTH;
     int HEIGHT = Globals.SCREEN_HEIGHT;
 
     Image vaus = new ImageIcon("vaus.png").getImage();
-    int paddleWidth = 80;
-    int paddleHeight = 20;
+
 
     public Paddle(int l, int r, int s) { 
         x = WIDTH/2 - 40;
@@ -24,10 +25,10 @@ public class Paddle {
 
     
     public void draw(Graphics g){
-//    	g.setColor(Color.RED);
-//    	g.fillRect(x,y,paddleWidth,paddleHeight);
+    	g.setColor(Color.RED);
+    	g.fillRect(x,y,width,height);
 
-        g.drawImage(vaus, x, y, null);
+//        g.drawImage(vaus, x, y, null);
 
     }
 
@@ -49,7 +50,7 @@ public class Paddle {
         if (keys[left] && (x - (speed/2) > 0)) {
             moveLeft();
         }
-        if (keys[right] && (x + (speed/2) < WIDTH - paddleWidth)) {
+        if (keys[right] && (x + (speed/2) < WIDTH - this.width)) {
             moveRight();
         }
 
@@ -58,8 +59,9 @@ public class Paddle {
 
     public Rectangle getRect(){
         // x, y, width, height
-    	return new Rectangle(x,y,paddleWidth,paddleHeight);
+    	return new Rectangle(x,y,this.width,this.height);
     }
+
     
     
 }

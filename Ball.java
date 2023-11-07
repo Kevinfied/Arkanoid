@@ -4,12 +4,11 @@ import javax.swing.*;
 
 public class Ball {
 	private static int x,y,vx,vy;
-//    int WIDTH = Globals.SCREEN_WIDTH;
-//    int HEIGHT = Globals.SCREEN_HEIGHT;
+	private static int width, height;
 
 	// border is 27 pixels wide
 
-	Image ball = new ImageIcon("vaus.png").getImage();
+	Image ballIcon = new ImageIcon("vaus.png").getImage();
     public Ball() {
     	x = Globals.SCREEN_WIDTH/2;
     	y = Globals.SCREEN_HEIGHT/2;
@@ -27,9 +26,12 @@ public class Ball {
     	// else{
     	// 	vy = Util.randint(19, 20);
     	// }
-        vx = 10;
-        vy = 10;
+        vx = 3;
+        vy = 3;
+		this.height = 10;
+		this.width = 10;
     }
+
     
     public int move(Paddle play){
 		// moving
@@ -44,31 +46,80 @@ public class Ball {
 		    		vx*=-1;
 		    	}
 
-		    	Rectangle r = getRect();
+		    	Rectangle ball = getRect();
 
 		// bouncing off paddles
-    	if(r.intersects(play.getRect())){
+    	if(ball.intersects(play.getRect())){
 			System.out.println("BOUNCE");
+			int temp = directionGet(x, y, vx, vy, play, ball);
 
-    		vy *= -1;
-    	}
+			if (temp == 1) {
+				vx*=-1;
+				vy*=-1;
+			}
+			else if (temp == 2) {
+				vy*=-1;
+			}
+			else if (temp == 3) {
+				vx*=-1;
+			}
 
-		
-    	return 0;
-    }
+		}
+
+
+		return 0;
+	}
+
+
+
+
+
+
+	public int directionGet(int xx, int yy, int velX, int velY, Paddle play, Rectangle ball) {
+
+		int prevX = xx - velX;
+		int prevY = yy - velY;
+
+
+		Rectangle prevBallY = new Rectangle(xx, prevY, width, height);
+		Rectangle prevBallX = new Rectangle(prevX, yy, width, height);
+
+		if (!(prevBallY.intersects(play.getRect())) && !(prevBallX.intersects(play.getRect()))) {
+			System.out.println("BOUNCE");
+			// 1 - both
+			return 1;
+		}
+
+		else if (!(prevBallY.intersects(play.getRect()))) {
+			System.out.println("BOUNCE");
+			// 2 - y
+			return 2;
+		}
+
+		else if (!(prevBallX.intersects(play.getRect()))) {
+			System.out.println("BOUNCE");
+			// 3 - x
+			return 3;
+		}
+
+		else {
+			System.out.println("BOUNCE");
+			// 0 - none
+			return 0;
+		}
+	}
     
     public Rectangle getRect(){
-        return new Rectangle(x,y,6,6);
+        return new Rectangle(x-(width/2),y-(height/2), width, height);
     	// return new Rectangle(x-3,y-3,6,6);
     }
     
 
     // draws the ball
     public void draw(Graphics g){
-//    	g.setColor(Color.RED);
-//    	g.fillOval(x-3,y-3,6,6);
-
-		g.drawImage(ball, x, y, null);
+    	g.setColor(Color.WHITE);
+    	g.fillOval(x-(width/2),y-(height/2),width,height);
+//		g.drawImage(ballIcon, x, y, null);
 
     }
 
