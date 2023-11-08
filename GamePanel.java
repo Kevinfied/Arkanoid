@@ -7,29 +7,25 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     Timer timer;
     Ball ball;
     private boolean []keys;
-//    Image back;
+
     Image menu, background;
-    Paddle player1, player2;
+
     Paddle player;
     int score1, score2;
     Font fontSys;
     String screen;
     
     public GamePanel(){
-        // int WIDTH = 400; 
-        // int HEIGHT = 800;
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         screen = "intro";
         menu = new ImageIcon("intro.png").getImage();
         background = new ImageIcon("background.png").getImage();
         keys = new boolean[KeyEvent.KEY_LAST+1];
         ball = new Ball();
-        // score1 = 0;
-        // score2 = 0;
 
 
         //                  left key          right key         paddle speed
-        player = new Paddle(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 10);
+        player = new Paddle();
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
@@ -45,18 +41,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
         else if(screen == "main"){	
             // int res = ball.move(player1,player2);
-            int res = ball.move(player);
-            // if(res==1){
-            //     score2++;
-            //     ball = new Ball();
-            // }
-            // if(res==2){
-            //     score1++;
-            //     ball = new Ball();
-            // }
             player.move(keys);
-            // player1.move(keys);
-            // player2.move(keys);
+            ball.move(player);
         }
     }
     

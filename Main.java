@@ -17,7 +17,7 @@ public class Main extends JFrame {
     
     public static void main(String[] arguments) {
         Main frame = new Main();
-        System.out.println("HI");		
+        System.out.println("RUNNING");
     }
 }
 
