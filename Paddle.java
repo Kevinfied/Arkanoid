@@ -4,16 +4,18 @@ import javax.swing.*;
 
 public class Paddle {
     private static int x, y;
-    private static final int WIDTH = 80;
-    private static final int HEIGHT = 20;
+    private static int WIDTH = 80;
+    private static int HEIGHT = 20;
     private static int speed;
 
+    int w = 80;
+    int h = 20;
 
     Image vaus = new ImageIcon("vaus.png").getImage();
 
     public Paddle() {
-        x = WIDTH/2 - 40;
-        y = HEIGHT - 100;
+        x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
+        y = Globals.SCREEN_HEIGHT - 100;
 
         speed = 10;
     }
@@ -21,7 +23,7 @@ public class Paddle {
     
     public void draw(Graphics g){
     	g.setColor(Color.RED);
-    	g.fillRect(x,y,WIDTH,HEIGHT);
+    	g.fillRect(x,y,w,h);
 
 //        g.drawImage(vaus, x, y, null);
 

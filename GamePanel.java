@@ -79,8 +79,12 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         
     // @Override
     public void	actionPerformed(ActionEvent e){
+
+
         move();
         repaint();
+
+
     }
     
     @Override
@@ -88,6 +92,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
         if(screen == "intro"){
             g.drawImage(menu,0,0,null);
+
+
         }
 
 

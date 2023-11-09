@@ -41,9 +41,9 @@ public class Ball {
 				this.x += vx;
 				this.y += vy;
 
-		    	if(y<0){ // bounces off the top and bottom walls.
+		    	if(y<=0){ // bounces off the top wall
 
-
+					y = 1;
 					vy*=-1;
 		    	}
 
