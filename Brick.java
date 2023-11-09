@@ -69,6 +69,12 @@ public class Brick {
         return HEIGHT;
     }
 
+
+    public static int getHealth() {
+        return health;
+    }
+
+
     public static void lowerHealth(int h) {
         health -= h;
     }
