@@ -25,9 +25,9 @@ public class Paddle {
     	g.setColor(Color.RED);
     	g.fillRect(x,y,w,h);
 
-//        g.drawImage(vaus, x, y, null);
-
     }
+
+
 
     public void setSpeed(int s){
         speed = s;

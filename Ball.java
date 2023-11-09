@@ -47,6 +47,11 @@ public class Ball {
 					vy*=-1;
 		    	}
 
+				if (y >= Globals.SCREEN_HEIGHT) {
+					y = Globals.SCREEN_HEIGHT - 1;
+					vy *= -1;
+				}
+
 		        if(x<=0 || x>=Globals.SCREEN_WIDTH-WIDTH){ // bounces off the left and right walls.
 
 					if (x <= 0) {
@@ -61,6 +66,8 @@ public class Ball {
 		    	}
 
 		    	Rectangle ball = getRect();
+
+				bouncePaddle();
 
 		// bouncing off paddles
 //    	if(ball.intersects(play.getRect())){
@@ -93,7 +100,9 @@ public class Ball {
 	}
 
 	public void bouncePaddle() {
+
 		paddleBounce = 0;
+
 		if (new Rectangle((int)x, (int)y, WIDTH, HEIGHT).intersectsLine((int)Paddle.getX(),(int)Paddle.getY(),(int)Paddle.getX()+Paddle.getWidth(),Paddle.getY())) {
 
 			paddleBounce = x-Paddle.getX(); // saving bounce x coord for catch powerup to retain bounce position
@@ -163,7 +172,7 @@ public class Ball {
     // draws the ball
     public void draw(Graphics g){
     	g.setColor(Color.WHITE);
-    	g.fillOval(x-(width/2),y-(height/2),width,height);
+    	g.fillOval(x-(WIDTH/2),y-(HEIGHT/2),WIDTH,HEIGHT);
 
     }
 

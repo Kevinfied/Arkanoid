@@ -18,10 +18,11 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     public GamePanel(){
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         screen = "intro";
-        menu = new ImageIcon("intro.png").getImage();
+        menu = new ImageIcon("intro1.png").getImage();
         background = new ImageIcon("background.png").getImage();
         keys = new boolean[KeyEvent.KEY_LAST+1];
         ball = new Ball();
+
 
 
         //                  left key          right key         paddle speed
@@ -104,6 +105,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             g.setColor(new Color(0,0,0));
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.drawImage(background, 0, 0, null);
+            ball.draw(g);
             ball.draw(g);
             player.draw(g);
             g.setFont(fontSys);

@@ -13,9 +13,14 @@ public class Blocks {
     private static final int blockheight = 20;
 
 
+
+
     public Blocks(int x, int y) {
         this.x = x;
         this.y = y;
     }
+
+
+
 
 }
