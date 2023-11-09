@@ -4,8 +4,10 @@ import javax.swing.*;
 
 public class Ball {
 	private static int x,y;
-	private static double vx,vy;
-	private static int width, height;
+//	private static double vx,vy;
+	private static int vx, vy;
+	private static double radius;
+
 
 	private static final int WIDTH = 12, HEIGHT = 12;
 
@@ -17,78 +19,60 @@ public class Ball {
     public Ball() {
     	x = Globals.SCREEN_WIDTH/2;
     	y = Globals.SCREEN_HEIGHT/2;
-    	// if(Util.randint(0,1)==0){
-    	// 	vx = Util.randint(-5, -7);
-    	// }
-    	// else{
-    	// 	vx = Util.randint(5, 7);
-    	// }
+		if(Util.randInt(0,1)==0){
+			vx = Util.randInt(-5,-4);
+		}
+		else{
+			vx = Util.randInt(4, 5);
+		}
 
+		vy = -6;
 
-    	// if(Util.randint(0,1)==0){
-    	// 	vy = Util.randint(-20, -19);
-    	// }
-    	// else{
-    	// 	vy = Util.randint(19, 20);
-    	// }
-        vx = 3;
-        vy = 3;
     }
 
-    
-    public int move(Paddle play){
+    public void wallBounce() {
+		if(y<=0){ // bounces off the top wall
+
+			y = 1;
+			vy*=-1;
+		}
+
+		if (y >= Globals.SCREEN_HEIGHT) { // bouncing off the bottom wall for now
+			y = Globals.SCREEN_HEIGHT - 1;
+			vy *= -1;
+		}
+
+		if(x<=0 || x>=Globals.SCREEN_WIDTH-WIDTH){ // bounces off the left and right walls.
+			if (x <= 0) {
+				x = 1;
+			}
+			else if (x >= Globals.SCREEN_WIDTH-WIDTH) {
+				x = Globals.SCREEN_WIDTH-WIDTH-1;
+			}
+			vx*=-1;
+		}
+
+	}
+
+	public void paddleBounce(Paddle play) {
+		Rectangle ball = getRect();
+		// bouncing off the paddle
+		if (ball.intersects(play.getRect())) {
+			if (!prevPos(0, vy).intersects(play.getRect())) {
+				vy *= -1;
+			}
+
+			if (!prevPos(vx, 0).intersects(play.getRect())) {
+				vx *= -1;
+			}
+
+		}
+	}
+    public void move(){
 		// moving
-				this.x += vx;
-				this.y += vy;
+		x += vx;
+		y += vy;
 
-		    	if(y<=0){ // bounces off the top wall
-
-					y = 1;
-					vy*=-1;
-		    	}
-
-				if (y >= Globals.SCREEN_HEIGHT) {
-					y = Globals.SCREEN_HEIGHT - 1;
-					vy *= -1;
-				}
-
-		        if(x<=0 || x>=Globals.SCREEN_WIDTH-WIDTH){ // bounces off the left and right walls.
-
-					if (x <= 0) {
-						x = 1;
-					}
-					else if (x >= Globals.SCREEN_WIDTH-WIDTH) {
-						x = Globals.SCREEN_WIDTH-WIDTH-1;
-					}
-					vx*=-1;
-
-
-		    	}
-
-		    	Rectangle ball = getRect();
-
-				bouncePaddle();
-
-		// bouncing off paddles
-//    	if(ball.intersects(play.getRect())){
-//			System.out.println("BOUNCE");
-//			int temp = directionGet(x, y, vx, vy, play, ball);
-//
-//			if (temp == 1) {
-//				vx *= -1;
-//				vy *= -1;
-//			}
-//			else if (temp == 2) {
-//				vy *= -1;
-//			}
-//			else if (temp == 3) {
-//				vx *= -1;
-//			}
-//
-//		}
-
-
-		return 0;
 	}
 
 
@@ -99,19 +83,22 @@ public class Ball {
 		y = Paddle.getY() - WIDTH;
 	}
 
-	public void bouncePaddle() {
+//	public void bouncePaddle() {}
 
-		paddleBounce = 0;
-
-		if (new Rectangle((int)x, (int)y, WIDTH, HEIGHT).intersectsLine((int)Paddle.getX(),(int)Paddle.getY(),(int)Paddle.getX()+Paddle.getWidth(),Paddle.getY())) {
-
-			paddleBounce = x-Paddle.getX(); // saving bounce x coord for catch powerup to retain bounce position
-
-			vy = -1 * Math.abs(vy);
-			int dir = (int) ((x+WIDTH/2 - Paddle.getX()) * (180.0/Paddle.getWidth()));
-			vx = -1 * Math.cos(Math.toRadians(dir))*10;
-		}
-	}
+//	public void bouncePaddle() {
+//
+//		paddleBounce = 0;
+//
+//		if (new Rectangle((int)x, (int)y, WIDTH, HEIGHT).intersectsLine((int)Paddle.getX(),(int)Paddle.getY(),(int)Paddle.getX()+Paddle.getWidth(),Paddle.getY())) {
+//
+//			paddleBounce = x-Paddle.getX(); // saving bounce x coord for catching powerups to retain bounce position
+//
+//			vy = -1 * Math.abs(vy);
+//			int dir = (int) ((x+WIDTH/2 - Paddle.getX()) * (180.0/Paddle.getWidth()));
+//			vx = -1 * Math.cos(Math.toRadians(dir))*10;
+//
+//		}
+//	}
 
 	public void reset() {
 		x = Globals.SCREEN_WIDTH/2;
@@ -135,8 +122,8 @@ public class Ball {
 		int prevY = (int)(yy - velY);
 
 
-		Rectangle prevBallY = new Rectangle(xx, prevY, width, height);
-		Rectangle prevBallX = new Rectangle(prevX, yy, width, height);
+		Rectangle prevBallY = new Rectangle(xx, prevY, WIDTH, HEIGHT);
+		Rectangle prevBallX = new Rectangle(prevX, yy, WIDTH, HEIGHT);
 
 		if (!(prevBallY.intersects(play.getRect())) && !(prevBallX.intersects(play.getRect()))) {
 			System.out.println("DIAGONAL BOUNCE");
@@ -163,13 +150,21 @@ public class Ball {
 		}
 	}
     
-    public Rectangle getRect(){
-        return new Rectangle(x-(WIDTH/2),y-(HEIGHT/2), WIDTH, HEIGHT);
-    	// return new Rectangle(x-3,y-3,6,6);
-    }
-    
 
-    // draws the ball
+	public Rectangle prevPos(int velX, int velY) {
+
+		return new Rectangle(x-velX-(WIDTH/2), y-velY-(HEIGHT/2), WIDTH, HEIGHT);
+
+	}
+
+	// get rect
+	public Rectangle getRect(){
+		return new Rectangle(x-(WIDTH/2),y-(HEIGHT/2), WIDTH, HEIGHT);
+		// return new Rectangle(x-3,y-3,6,6);
+	}
+
+
+	// draws the ball
     public void draw(Graphics g){
     	g.setColor(Color.WHITE);
     	g.fillOval(x-(WIDTH/2),y-(HEIGHT/2),WIDTH,HEIGHT);
@@ -192,11 +187,11 @@ public class Ball {
 		return vy;
 	}
 
-	public static void setVelX(double n) {
+	public static void setVelX(int n) {
 		vx = n;
 	}
 
-	public static void setVelY(double n) {
+	public static void setVelY(int n) {
 		vy = n;
 	}
 

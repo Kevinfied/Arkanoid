@@ -31,7 +31,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         requestFocus();
         addKeyListener(this);
         addMouseListener(this);
-        timer = new Timer(5, this);
+        timer = new Timer(Globals.GAME_SPEED, this);
         timer.start();
         setPreferredSize(new Dimension(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
     }
@@ -40,10 +40,12 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         if(screen == "intro"){
     
         }
-        else if(screen == "main"){	
-            // int res = ball.move(player1,player2);
+        else if(screen == "main"){
+            ball.wallBounce();
+            ball.paddleBounce(player);
             player.move(keys);
-            ball.move(player);
+            ball.move();
+
         }
     }
     
@@ -106,7 +108,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.drawImage(background, 0, 0, null);
             ball.draw(g);
-            ball.draw(g);
+//            ball.draw(g);
             player.draw(g);
             g.setFont(fontSys);
         }
