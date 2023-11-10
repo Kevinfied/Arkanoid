@@ -1,7 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+import javax.swing.Timer;
+import java.util.*;
+import java.util.ArrayList;
 
 class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
     Timer timer;
@@ -43,8 +45,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         else if(screen == "main"){
             ball.wallBounce();
             ball.paddleBounce(player);
-            player.move(keys);
             ball.move();
+            player.move(keys);
+
 
         }
     }
@@ -101,7 +104,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
 
 
-        else if(screen == "main"){
+        else if(screen == "main") {
+
+
 //            g.setColor(new Color(0,0,0));
 //            g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.setColor(new Color(0,0,0));
@@ -111,6 +116,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 //            ball.draw(g);
             player.draw(g);
             g.setFont(fontSys);
+
         }
     }
 }
