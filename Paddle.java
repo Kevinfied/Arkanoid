@@ -48,10 +48,10 @@ public class Paddle {
         int rightD = KeyEvent.VK_D;
 
         // keeps the paddle on the screen
-        if ((keys[leftKey] || keys[leftA]) && (x - (speed/2) > 0)) {
+        if ((keys[leftKey] || keys[leftA]) && (x - (speed/2) > 0+Globals.BORDER_WIDTH)) {
             moveLeft();
         }
-        if ((keys[rightKey] || keys[rightD])&& (x + (speed/2) < Globals.SCREEN_WIDTH - WIDTH)) {
+        if ((keys[rightKey] || keys[rightD])&& (x + (speed/2) < Globals.SCREEN_WIDTH - WIDTH - Globals.BORDER_WIDTH-2)) {
             moveRight();
         }
 

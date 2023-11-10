@@ -22,6 +22,11 @@ public class Level {
             lives = 3;
             totalPoints = 0;
 
+
+
+
+
+
             for (int i = 0; i < 8; i++) {
 
                 for (int j=100; j<700; j+= 100) {

@@ -31,11 +31,11 @@ public class Brick {
 
         points = pointVals[Arrays.asList(colors).indexOf(col)];
         this.color = col;
-        icon = Util.loadScaledImg("assets/blocks/Arkanoid_Brick"+color+".jpg", WIDTH, HEIGHT);
+        icon = Util.loadScaledImg("assets/blocks/"+color+".jpg", WIDTH, HEIGHT);
         health = 1;
 
         if (color.equals("Silver")) {
-            health = 2; //silver blocks have 2 health
+            health = 2;
         }
 
 
@@ -81,8 +81,31 @@ public class Brick {
 
 
     public void draw(Graphics g) {
+        System.out.println("DRAW");
         g.drawImage(icon, x, y, null);
+
     }
 
+    public Rectangle getRect() {
+
+        return new Rectangle(x, y, WIDTH, HEIGHT);
+    }
+
+    public Rectangle getBottom(){ //returns the bottom side of the block
+        return new Rectangle(x, y+HEIGHT-1, WIDTH, 1);
+    }
+    public Rectangle getTop(){ //returns the top side of the block
+        return new Rectangle(x, y, WIDTH, 1);
+    }
+    public Rectangle getLeft(){ //returns the left side of the block
+        return new Rectangle(x, y, 1, HEIGHT);
+    }
+    public Rectangle getRight(){//returns the right side of the block
+        return new Rectangle(x+WIDTH-1, y, 1, HEIGHT);
+    }
+
+    public int getPoints() {
+        return points;
+    }
 
 }

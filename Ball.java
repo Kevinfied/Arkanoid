@@ -2,14 +2,16 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
 public class Ball {
 	private static int x,y;
 //	private static double vx,vy;
-	private static int vx, vy;
+	public static int vx, vy;
 	private static double radius;
 
 
 	private static final int WIDTH = 12, HEIGHT = 12;
+	private static final int RADIUS = WIDTH/2;
 
 	public static double paddleBounce = 0;
 
@@ -31,23 +33,24 @@ public class Ball {
     }
 
     public void wallBounce() {
-		if(y<=0){ // bounces off the top wall
+		int var = 3;
+		if(y<=0+Globals.BORDER_WIDTH+var){ // bounces off the top wall
 
-			y = 1;
+			y = Globals.BORDER_WIDTH+1+var;
 			vy*=-1;
 		}
 
-		if (y >= Globals.SCREEN_HEIGHT) { // bouncing off the bottom wall for now
-			y = Globals.SCREEN_HEIGHT - 1;
+		if (y >= Globals.SCREEN_HEIGHT-Globals.BORDER_WIDTH) { // bouncing off the bottom wall for now
+			y = Globals.SCREEN_HEIGHT-Globals.BORDER_WIDTH - 1;
 			vy *= -1;
 		}
 
-		if(x<=0 || x>=Globals.SCREEN_WIDTH-WIDTH){ // bounces off the left and right walls.
-			if (x <= 0) {
-				x = 1;
+		if(x<=0+Globals.BORDER_WIDTH || x>=Globals.SCREEN_WIDTH-WIDTH-Globals.BORDER_WIDTH){ // bounces off the left and right walls.
+			if (x <= 0 + Globals.BORDER_WIDTH) {
+				x = 1+Globals.BORDER_WIDTH;
 			}
-			else if (x >= Globals.SCREEN_WIDTH-WIDTH) {
-				x = Globals.SCREEN_WIDTH-WIDTH-1;
+			else if (x >= Globals.SCREEN_WIDTH-WIDTH - Globals.BORDER_WIDTH) {
+				x = Globals.SCREEN_WIDTH-WIDTH-1-Globals.BORDER_WIDTH;
 			}
 			vx*=-1;
 		}
@@ -83,22 +86,6 @@ public class Ball {
 		y = Paddle.getY() - WIDTH;
 	}
 
-//	public void bouncePaddle() {}
-
-//	public void bouncePaddle() {
-//
-//		paddleBounce = 0;
-//
-//		if (new Rectangle((int)x, (int)y, WIDTH, HEIGHT).intersectsLine((int)Paddle.getX(),(int)Paddle.getY(),(int)Paddle.getX()+Paddle.getWidth(),Paddle.getY())) {
-//
-//			paddleBounce = x-Paddle.getX(); // saving bounce x coord for catching powerups to retain bounce position
-//
-//			vy = -1 * Math.abs(vy);
-//			int dir = (int) ((x+WIDTH/2 - Paddle.getX()) * (180.0/Paddle.getWidth()));
-//			vx = -1 * Math.cos(Math.toRadians(dir))*10;
-//
-//		}
-//	}
 
 	public void reset() {
 		x = Globals.SCREEN_WIDTH/2;
@@ -179,11 +166,11 @@ public class Ball {
 		return y;
 	}
 
-	public static double getVelX() {
+	public static int getVelX() {
 		return vx;
 	}
 
-	public static double getVelY() {
+	public static int getVelY() {
 		return vy;
 	}
 
