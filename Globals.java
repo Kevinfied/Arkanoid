@@ -12,6 +12,8 @@ class Globals {
 
     public static final int BORDER_WIDTH = 20;
 
+
+
     public static final int GAME_SPEED = 5; // for debugging purposes
 
 

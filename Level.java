@@ -22,67 +22,81 @@ public class Level {
             lives = 3;
             totalPoints = 0;
 
+            // good width maybe 70?
 
-
-
-
-
-            for (int i = 0; i < 8; i++) {
-
-                for (int j=100; j<700; j+= 100) {
-
-                    String blockColor = Brick.colors[i];
-
-                    if (i == 7 && (j == 300 || j == 400)) {
-                        blockColor = "Gold";
-                    }
-                    else if (i == 5 && (j == 200 || j == 500)) {
-                        blockColor = "Silver";
-                    }
-                    else if (i == 4 && (j == 30 || j == 400)) {
-                        blockColor = "Silver";
-                    }
-
-                    totalPoints += Brick.pointVals[Arrays.asList(Brick.colors).indexOf(blockColor)];
-
-                    blocks.add(new Brick(j, (8-i)*50 + 100, 100, 50, blockColor));
-                }
-
+            for (int i=1; i<8; i++) {
+                System.out.println(i*70);
+                blocks.add(new Brick(i*70, 200, 70, 50, Brick.colors[i]));
             }
-        }
-        else if (lvl == 2) {
+//            blocks.add(new Brick(20, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(90, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(160, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(230, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(300, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(370, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(440, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(510, 200, 70, 50, "Silver"));
+//            blocks.add(new Brick(580, 200, 70, 50, "Silver"));
 
-            totalPoints = 0;
-            level = 2;
 
 
-            for (int k=0; k<8; k++) {
-                for (int i=100; i<700; i+=100) {
-                    String blockColor = Brick.colors[7-k];
 
-                    if (k == 3 && (i == 200 || i == 500)) {
-                        blockColor = "Gold";
-                    }
-                    else if (k == 5 && (i == 300 || i == 400)) {
+//            for (int i = 0; i < 8; i++) {
+//
+//                for (int j=100; j<700; j+= 100) {
+//
+//                    String blockColor = Brick.colors[i];
+//
+//                    if (i == 7 && (j == 300 || j == 400)) {
+//                        blockColor = "Gold";
+//                    }
+//                    else if (i == 5 && (j == 200 || j == 500)) {
 //                        blockColor = "Silver";
-                        continue;
-                    }
-
-                    else if (k == 4 && (i == 30 || i == 400)) {
-                        blockColor = "Silver";
-                    }
-
-                    totalPoints += Brick.pointVals[Arrays.asList(Brick.colors).indexOf(blockColor)];
-                    blocks.add (new Brick(i, (8-k)*50 + 50, 100, 50, blockColor));
-
-
-                }
-            }
-
-            blocks.add(new Brick(350, 200, 100, 50, "Silver"));
-            totalPoints += 50;
-
+//                    }
+//                    else if (i == 4 && (j == 30 || j == 400)) {
+//                        blockColor = "Silver";
+//                    }
+//
+//                    totalPoints += Brick.pointVals[Arrays.asList(Brick.colors).indexOf(blockColor)];
+//
+//                    blocks.add(new Brick(j, (8-i)*50 + 100, 100, 50, blockColor));
+//                }
+//
+//            }
         }
+//        else if (lvl == 2) {
+//
+//            totalPoints = 0;
+//            level = 2;
+//
+//
+//            for (int k=0; k<8; k++) {
+//                for (int i=100; i<700; i+=100) {
+//                    String blockColor = Brick.colors[7-k];
+//
+//                    if (k == 3 && (i == 200 || i == 500)) {
+//                        blockColor = "Gold";
+//                    }
+//                    else if (k == 5 && (i == 300 || i == 400)) {
+////                        blockColor = "Silver";
+//                        continue;
+//                    }
+//
+//                    else if (k == 4 && (i == 30 || i == 400)) {
+//                        blockColor = "Silver";
+//                    }
+//
+//                    totalPoints += Brick.pointVals[Arrays.asList(Brick.colors).indexOf(blockColor)];
+//                    blocks.add (new Brick(i, (8-k)*50 + 50, 100, 50, blockColor));
+//
+//
+//                }
+//            }
+//
+//            blocks.add(new Brick(350, 200, 100, 50, "Silver"));
+//            totalPoints += 50;
+//
+//        }
 
 
 

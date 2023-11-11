@@ -21,7 +21,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     Font fontSys;
     String screen;
 
-    private ArrayList<Brick> blocks;
+    public ArrayList<Brick> blocks = new ArrayList<Brick>();;
     private ArrayList<Powerup> powerups;
     private ArrayList<Laser> lasers;
 
@@ -80,7 +80,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 //
 //    }
 
-    Brick b;
+    Brick b, c, d;
+    Level one;
+
     public GamePanel(){
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         screen = "intro";
@@ -90,7 +92,27 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         keys = new boolean[KeyEvent.KEY_LAST+1];
         ball = new Ball();
 
-        b = new Brick(20, 20, 50, 20, "Silver");
+//        b = new Brick(20, 20, 50, 20, "Silver");
+//        c = new Brick(20, 200, 70, 50, "Silver");
+//        blocks.add(new Brick(90, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(160, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(230, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(300, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(370, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(440, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(510, 200, 70, 50, "Silver"));
+//        blocks.add(new Brick(580, 200, 70, 50, "Silver"));
+//        blocks.add(b);
+//        blocks.add(c);
+
+        one = new Level(1);
+        for (Brick e : one.getBlocks()){
+            blocks.add(e);
+        }
+        for (Brick FR: blocks) {
+            System.out.println(FR.toString());
+        }
+//        System.out.println(blocks);
 
         //                  left key          right key         paddle speed
         player = new Paddle();
@@ -104,23 +126,18 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     }
 
     public void brickCollide() {
-
-
         for (int i=0; i<blocks.size(); i++) {
             Brick b = blocks.get(i);
             if (ball.getRect().intersects(b.getRect())) {
                 if (!ball.prevPos(0, ball.vy).intersects(b.getRect())) {
                     ball.vy *= -1;
                 }
-
                 if (!ball.prevPos(ball.vx, 0).intersects(b.getRect())) {
                     ball.vx *= -1;
                 }
-
                 if (blocks.get(i).getHealth() <= 0){ //if the Block is broken
                     blocksToDelete.add(blocks.get(i));
 
-
                 }
 
             }
@@ -129,100 +146,45 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     }
 
 
-    public void deleteBlocks(){ //method to remove broken blocks
+    public void deleteBlocks(){
         for (Brick b : blocksToDelete){
-            points += b.getPoints(); //increases points
-            blocks.remove(b); //removes Block
+            points += b.getPoints();
+            blocks.remove(b);
         }
-        blocksToDelete.clear(); //resets the set of broken blocks
+        blocksToDelete.clear();
     }
 
 
-    public void collideBlocks(){//method to check collisions with Blocks and respond accordingly
-        int newVX = ball.getVelX(), newVY = ball.getVelY(); //the velocity in x and y directions after hitting zero or more blocks
 
-        for (int i=0; i<blocks.size(); i++){
-            Brick b = blocks.get(i);
-            if (ball.getRect().intersects(b.getRect())){ //checks if ball intersects with a Block
-//                ball.playBounce(); //makes sound effect for bouncing ball
-                if (!b.getColor().equals("Gold")){
-
-                    blocks.get(i).lowerHealth(1);
-                    if (blocks.get(i).getHealth() <= 0){ //if the Block is broken
-                        blocksToDelete.add(blocks.get(i));
-
-                        if (!b.getColor().equals("Silver")){ //no Powerups from Silver blocks
-                            //adds random Powerup or no Powerup for each Block that broke
-                            int chance = Util.randInt(1, 30);
-//                            if (chance <= 4){
-//                                powerups.add(new Powerup(b.getX(), b.getY(),Powerup.powerNames[chance-1]));
-//                            }
-                        }
-                    }
-                }
-
-                //checks which side of the Block, b, the ball hit and changes the velocity accordingly
-                if (ball.getRect().intersects(b.getBottom()) || ball.getRect().intersects(b.getTop())){
-                    newVY = -ball.getVelY();
-                }
-                else if (ball.getRect().intersects(b.getLeft()) || ball.getRect().intersects(b.getRight())){
-                    newVX = -ball.getVelX();
-                }
-            }
-        }
-
-        //sets new velocity for ball
-        ball.setVelX(newVX);
-        ball.setVelY(newVY);
-
-
-    }
 
 
     public void move(){
-
         if(screen == "intro"){
-    
         }
 
 
 
         else if(screen == "game"){
-
-
-
             ball.move();
             player.move(keys);
-
-
-
-
             ball.wallBounce();
             ball.paddleBounce(player);
-
-
         }
     }
     
     public void	keyPressed(KeyEvent e){
         int code = e.getKeyCode();
         keys[code] = true;
-
     }
     public void	keyReleased(KeyEvent e){
         int code = e.getKeyCode();
         keys[code] = false;		
     }
-    public void	keyTyped(KeyEvent e){
-    }
+    public void	keyTyped(KeyEvent e){}
 
-    public void	mouseClicked(MouseEvent e){
+    public void	mouseClicked(MouseEvent e){}
 
-    }
-
-    public void	mouseEntered(MouseEvent e){
-
-    }
+    public void	mouseEntered(MouseEvent e){}
 
     public void	mouseExited(MouseEvent e){}
 
@@ -231,18 +193,20 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         if(screen == "intro"){
             screen = "game";
         }
+//        if (screen == "game") {
+//            player.x = mouse.x;
+//            player.y = mouse.y;
+//        }
         
     }
     public void	mouseReleased(MouseEvent e) {}
         
-    // @Override
+
     public void	actionPerformed(ActionEvent e){
-
-
         move();
+        brickCollide();
+//        deleteBlocks();
         repaint();
-
-
     }
     
     @Override
@@ -265,12 +229,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.drawImage(background, 0, 0, null);
 
-//            for (Brick b: blocks) {
-//                b.draw(g);
-//            }
+            for (Brick FR: blocks) {
+                FR.draw(g);
+            }
+
+//            blocks.get(0).draw(g);
 
 
-            b.draw(g);
+//            b.draw(g);
 
             ball.draw(g);
 //            ball.draw(g);

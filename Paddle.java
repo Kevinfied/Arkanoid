@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Paddle {
-    private static int x, y;
+    public static int x, y;
     private static int WIDTH = 80;
     private static int HEIGHT = 20;
     private static int speed;

@@ -8,13 +8,13 @@ import java.util.*;
 public class Brick {
 
 //    private String[] colors
-    private static int x, y;
+    private int x, y;
     public static final String[] colors = {"White", "Orange", "Cyan", "Green", "Red", "Blue", "Violet", "Yellow", "Gold", "Silver"};
 
     public static final int[] pointVals = {50, 60, 70, 80, 90, 100, 110, 120, 0, 50};
-    private static int WIDTH, HEIGHT;
+    private int WIDTH, HEIGHT;
 
-    private static int health;
+    private int health;
 
     private Image icon;
 
@@ -23,14 +23,14 @@ public class Brick {
     private String color;
     public Brick(int xx, int yy, int w, int h, String col) {
 
-        this.x = xx;
-        this.y = yy;
-        this.WIDTH = w;
-        this.HEIGHT = h;
-        this.health = health;
+        x = xx;
+        y = yy;
+        WIDTH = w;
+        HEIGHT = h;
+        health = health;
 
         points = pointVals[Arrays.asList(colors).indexOf(col)];
-        this.color = col;
+        color = col;
         icon = Util.loadScaledImg("assets/blocks/"+color+".jpg", WIDTH, HEIGHT);
         health = 1;
 
@@ -49,11 +49,11 @@ public class Brick {
     }
 
 
-    public static int getX() {
+    public int getX() {
         return x;
     }
 
-    public static int getY() {
+    public int getY() {
         return y;
     }
 
@@ -61,27 +61,27 @@ public class Brick {
         return color;
     }
 
-    public static int getWidth() {
+    public int getWidth() {
         return WIDTH;
     }
 
-    public static int getHeight() {
+    public int getHeight() {
         return HEIGHT;
     }
 
 
-    public static int getHealth() {
-        return health;
+    public int getHealth() {
+        return this.health;
     }
 
 
-    public static void lowerHealth(int h) {
+    public void lowerHealth(int h) {
         health -= h;
     }
 
 
     public void draw(Graphics g) {
-        System.out.println("DRAW");
+//        System.out.println("DRAW");
         g.drawImage(icon, x, y, null);
 
     }
@@ -107,5 +107,21 @@ public class Brick {
     public int getPoints() {
         return points;
     }
+
+    @Override
+    public String toString() {
+        return "Brick{" +
+                "x=" + x +
+                ", y=" + y +
+                ", WIDTH=" + WIDTH +
+                ", HEIGHT=" + HEIGHT +
+                ", health=" + health +
+                ", icon=" + icon +
+                ", points=" + points +
+                ", color='" + color + '\'' +
+                '}';
+    }
+
+
 
 }
