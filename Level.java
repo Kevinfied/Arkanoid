@@ -22,7 +22,7 @@ public class Level {
             lives = 3;
             totalPoints = 0;
 
-            // good width maybe 70?
+            // 2 * 2 * 2 * 5
 
             for (int i=1; i<=14; i++) {
                 blocks.add(new Brick(i*40-20, 75, 40, 20,"Silver"));
@@ -48,34 +48,16 @@ public class Level {
                 blocks.add(new Brick(i*40-20, 175, 40, 20,"Green"));
             }
 
-//            for (int i=1; i<=8; i++) {
-//                System.out.println(i*70);
-//                blocks.add(new Brick(i*70-50, 75, 70, 50,"Silver"));
-//            }
-//
-//            for (int i=1; i<=8; i++) {
-//                blocks.add(new Brick(i*70-50, 125, 70, 50,"Yellow"));
-//            }
-//
-//            for (int i=1; i<= 8; i++) {
-//                blocks.add(new Brick(i*70-50, 175, 70, 50,"Red"));
-//            }
-//
-//            for (int i=1; i<= 8; i++) {
-//                blocks.add(new Brick(i*70-50, 225, 70, 50,"Blue"));
-//            }
-//
-//            for (int i=1; i<= 8; i++) {
-//                blocks.add(new Brick(i*70-50, 275, 70, 50,"Green"));
-//            }
-//
-//            for (int i=1; i<= 8; i++) {
-//                blocks.add(new Brick(i*70-50, 325, 70, 50,"Cyan"));
-//            }
-//
-//            for (int i=1; i<= 8; i++) {
-//                blocks.add(new Brick(i*70-50, 375, 70, 50,"White"));
-//            }
+
+        if (lvl == 2) {
+
+            
+
+
+
+        }
+
+
 
 
 
