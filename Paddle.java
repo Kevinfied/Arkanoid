@@ -4,15 +4,16 @@ import javax.swing.*;
 
 public class Paddle {
     public static int x, y;
-    private static int WIDTH = 80;
-    private static int HEIGHT = 20;
+    private int WIDTH = 80;
+    private int HEIGHT = 20;
     private static int speed;
 
+//    private Image icon;
     int w = 80;
     int h = 20;
 
     Image vaus = new ImageIcon("vaus.png").getImage();
-
+    Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
     public Paddle() {
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
@@ -22,9 +23,10 @@ public class Paddle {
 
     
     public void draw(Graphics g){
-    	g.setColor(Color.RED);
-    	g.fillRect(x,y,w,h);
+//    	g.setColor(Color.RED);
+//    	g.fillRect(x,y,w,h);
 
+        g.drawImage(icon, x, y, null);
     }
 
 
@@ -75,14 +77,30 @@ public class Paddle {
         return y;
     }
 
-    public static int getWidth() {
+    public int getWidth() {
         return WIDTH;
     }
 
-    public static int getHeight() {
+    public int getHeight() {
         return HEIGHT;
     }
 
+    public void setX(int n) {
+        if (n < 0 + Globals.BORDER_WIDTH) {
+            x = 0+Globals.BORDER_WIDTH;
+        }
+        else if (n > Globals.SCREEN_WIDTH - WIDTH - Globals.BORDER_WIDTH) {
+            x = Globals.SCREEN_WIDTH - WIDTH - Globals.BORDER_WIDTH;
+        }
+        else {
+            x = n;
+        }
+//        x = n;
+    }
+
+    public void setY(int n) {
+        y = n;
+    }
 
 
 

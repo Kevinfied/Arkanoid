@@ -12,7 +12,7 @@ public class Level {
 
     private static int level;
     private ArrayList<Brick> blocks;
-
+    private ArrayList<Brick> goldBlocks;
     Level (int lvl) {
 
         blocks = new ArrayList<Brick>();
@@ -24,19 +24,59 @@ public class Level {
 
             // good width maybe 70?
 
-            for (int i=1; i<8; i++) {
-                System.out.println(i*70);
-                blocks.add(new Brick(i*70, 200, 70, 50, Brick.colors[i]));
+            for (int i=1; i<=14; i++) {
+                blocks.add(new Brick(i*40-20, 75, 40, 20,"Silver"));
             }
-//            blocks.add(new Brick(20, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(90, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(160, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(230, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(300, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(370, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(440, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(510, 200, 70, 50, "Silver"));
-//            blocks.add(new Brick(580, 200, 70, 50, "Silver"));
+
+            for (int i=1; i<=14; i++) {
+                blocks.add(new Brick(i*40-20, 95, 40, 20,"Red"));
+            }
+
+            for (int i=1; i<=14; i++) {
+                blocks.add(new Brick(i*40-20, 115, 40, 20,"Yellow"));
+            }
+
+            for (int i=1; i<= 14; i++) {
+                blocks.add(new Brick(i*40-20, 135, 40, 20,"Blue"));
+            }
+
+            for (int i=1; i<=14; i++) {
+                blocks.add(new Brick(i*40-20, 155, 40, 20,"Violet"));
+            }
+
+            for (int i=1; i<=14; i++) {
+                blocks.add(new Brick(i*40-20, 175, 40, 20,"Green"));
+            }
+
+//            for (int i=1; i<=8; i++) {
+//                System.out.println(i*70);
+//                blocks.add(new Brick(i*70-50, 75, 70, 50,"Silver"));
+//            }
+//
+//            for (int i=1; i<=8; i++) {
+//                blocks.add(new Brick(i*70-50, 125, 70, 50,"Yellow"));
+//            }
+//
+//            for (int i=1; i<= 8; i++) {
+//                blocks.add(new Brick(i*70-50, 175, 70, 50,"Red"));
+//            }
+//
+//            for (int i=1; i<= 8; i++) {
+//                blocks.add(new Brick(i*70-50, 225, 70, 50,"Blue"));
+//            }
+//
+//            for (int i=1; i<= 8; i++) {
+//                blocks.add(new Brick(i*70-50, 275, 70, 50,"Green"));
+//            }
+//
+//            for (int i=1; i<= 8; i++) {
+//                blocks.add(new Brick(i*70-50, 325, 70, 50,"Cyan"));
+//            }
+//
+//            for (int i=1; i<= 8; i++) {
+//                blocks.add(new Brick(i*70-50, 375, 70, 50,"White"));
+//            }
+
 
 
 
@@ -119,6 +159,8 @@ public class Level {
         return blocks;
     }
 
-
+    public ArrayList<Brick> getGoldBlocks() {
+        return goldBlocks;
+    }
 
 }

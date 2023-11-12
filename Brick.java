@@ -32,10 +32,13 @@ public class Brick {
         points = pointVals[Arrays.asList(colors).indexOf(col)];
         color = col;
         icon = Util.loadScaledImg("assets/blocks/"+color+".jpg", WIDTH, HEIGHT);
-        health = 1;
+
 
         if (color.equals("Silver")) {
             health = 2;
+        }
+        else {
+            health = 1;
         }
 
 

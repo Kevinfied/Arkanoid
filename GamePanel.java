@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 
-class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
+class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener, MouseMotionListener {
     Timer timer;
     Ball ball;
     private boolean []keys;
@@ -21,12 +21,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     Font fontSys;
     String screen;
 
-    public ArrayList<Brick> blocks = new ArrayList<Brick>();;
+    public ArrayList<Brick> blocks = new ArrayList<Brick>();
+    public ArrayList<Brick> goldBlocks = new ArrayList<Brick>();
     private ArrayList<Powerup> powerups;
     private ArrayList<Laser> lasers;
 
     private ArrayList<Point> explosions;
     private Set<Brick> blocksToDelete; //blocks that are broken and should be remvoed from blocks
+
     private LoadedImages images = new LoadedImages(); //images that are to be used
 
     private Paddle paddle; //the current paddle
@@ -39,6 +41,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     private Sound music;
 
     private boolean start, catching, firstEver, laserActive;
+    Level one;
 
 //    public void startLevel(int lvl) {
 //
@@ -80,46 +83,40 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 //
 //    }
 
-    Brick b, c, d;
-    Level one;
+
 
     public GamePanel(){
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         screen = "intro";
-        menu = new ImageIcon("intro1.png").getImage();
+        menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+//        menu = new ImageIcon("assets/intro.png").getImage();
 //        background = new ImageIcon("background.png").getImage();
-        background = Util.loadScaledImg("background.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         keys = new boolean[KeyEvent.KEY_LAST+1];
         ball = new Ball();
 
-//        b = new Brick(20, 20, 50, 20, "Silver");
-//        c = new Brick(20, 200, 70, 50, "Silver");
-//        blocks.add(new Brick(90, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(160, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(230, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(300, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(370, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(440, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(510, 200, 70, 50, "Silver"));
-//        blocks.add(new Brick(580, 200, 70, 50, "Silver"));
-//        blocks.add(b);
-//        blocks.add(c);
+
 
         one = new Level(1);
         for (Brick e : one.getBlocks()){
             blocks.add(e);
         }
-        for (Brick FR: blocks) {
-            System.out.println(FR.toString());
-        }
-//        System.out.println(blocks);
 
-        //                  left key          right key         paddle speed
+        blocksToDelete = new HashSet<>();
+
+//        for (Brick FR: blocks) {
+//            System.out.println(FR.toString());
+//        }
         player = new Paddle();
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
         addMouseListener(this);
+
+        addMouseMotionListener(this);
+        addMouseListener(this);
+
+
         timer = new Timer(Globals.GAME_SPEED, this);
         timer.start();
         setPreferredSize(new Dimension(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
@@ -135,10 +132,11 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                 if (!ball.prevPos(ball.vx, 0).intersects(b.getRect())) {
                     ball.vx *= -1;
                 }
+                b.lowerHealth(1);
                 if (blocks.get(i).getHealth() <= 0){ //if the Block is broken
                     blocksToDelete.add(blocks.get(i));
-
                 }
+
 
             }
 
@@ -155,14 +153,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     }
 
 
-
-
-
     public void move(){
         if(screen == "intro"){
         }
-
-
 
         else if(screen == "game"){
             ball.move();
@@ -190,25 +183,32 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
     public void	mousePressed(MouseEvent e){
         System.out.println("HERE");
-        if(screen == "intro"){
+        System.out.println(points);
+        if(screen == "intro") {
             screen = "game";
         }
-//        if (screen == "game") {
-//            player.x = mouse.x;
-//            player.y = mouse.y;
-//        }
-        
+
+
     }
     public void	mouseReleased(MouseEvent e) {}
-        
+
+    @Override
+    public void mouseMoved(MouseEvent e) {}
+
+    public void mouseDragged(MouseEvent e) {
+        if (screen == "game") {
+            player.setX(e.getX()-player.getWidth()/2);
+        }
+    }
 
     public void	actionPerformed(ActionEvent e){
         move();
         brickCollide();
-//        deleteBlocks();
+        deleteBlocks();
         repaint();
     }
-    
+
+
     @Override
     public void paint(Graphics g){
 
@@ -222,9 +222,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
 
         else if(screen == "game"){
-
-//            g.setColor(new Color(0,0,0));
-//            g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.setColor(new Color(0,0,0));
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             g.drawImage(background, 0, 0, null);
@@ -233,19 +230,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                 FR.draw(g);
             }
 
-//            blocks.get(0).draw(g);
-
-
-//            b.draw(g);
-
             ball.draw(g);
-//            ball.draw(g);
             player.draw(g);
             g.setFont(fontSys);
-
-
-
-
         }
     }
 }

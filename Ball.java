@@ -79,12 +79,12 @@ public class Ball {
 	}
 
 
-	public void onPaddle() {
-		// gotta check for the sticking powerup later
-
-		x = Paddle.getX() + Paddle.getWidth()/2 - WIDTH/2;
-		y = Paddle.getY() - WIDTH;
-	}
+//	public void onPaddle() {
+//		// gotta check for the sticking powerup later
+//
+//		x = Paddle.getX() + Paddle.getWidth()/2 - WIDTH/2;
+//		y = Paddle.getY() - WIDTH;
+//	}
 
 
 	public void reset() {
