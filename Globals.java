@@ -12,9 +12,11 @@ class Globals {
 
     public static final int BORDER_WIDTH = 20;
 
+    public static final int TOP_SCREEN_HEIGHT = 100;
 
 
-    public static final int GAME_SPEED = 1; // for debugging purposes
+
+    public static final int GAME_SPEED = 5; // for debugging purposes
 
 
 

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Powerup {
 
-    public static final String[] names= {"Player","Catch", "Enlarge", "Laser"};
+    public static final String[] names= {"Player", "Catch", "Enlarge", "Laser"};
 
 
     public int x, y;
@@ -21,9 +21,13 @@ public class Powerup {
         y = yy;
         type = t;
         speed = 3;
-
-
     }
+
+    public void playerPowerup() {
+        Paddle.addHealth(1);
+    }
+
+
 
     public void move() {
         y += speed;
@@ -39,6 +43,14 @@ public class Powerup {
 
     public void draw() {
 
+
+    }
+
+    public void drop() {
+        int a = Util.randInt(0, 100);
+        if (a < 50) {
+
+        }
     }
 
 

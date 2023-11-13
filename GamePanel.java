@@ -93,6 +93,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 //        background = new ImageIcon("background.png").getImage();
         background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         keys = new boolean[KeyEvent.KEY_LAST+1];
+        player = new Paddle();
         ball = new Ball();
 
 
@@ -107,7 +108,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 //        for (Brick FR: blocks) {
 //            System.out.println(FR.toString());
 //        }
-        player = new Paddle();
+
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
@@ -137,7 +138,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                     blocksToDelete.add(blocks.get(i));
                 }
 
-
             }
 
         }
@@ -158,9 +158,12 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
 
         else if(screen == "game"){
-            ball.move();
+
+
             player.move(keys);
+            ball.move();
             ball.wallBounce();
+            ball.deathCheck(player);
             ball.paddleBounce(player);
         }
     }
@@ -168,6 +171,21 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     public void	keyPressed(KeyEvent e){
         int code = e.getKeyCode();
         keys[code] = true;
+
+        if (screen == "game") {
+            if (code == KeyEvent.VK_SPACE) {
+                if (ball.getOnPad()) {
+//                    ball.setStart(true);
+                    ball.setOnPad(false);
+                    ball.launchBall();
+                }
+//                ball.launchBall();
+            }
+            if (code == KeyEvent.VK_8) {
+                player.egg = true;
+            }
+        }
+
     }
     public void	keyReleased(KeyEvent e){
         int code = e.getKeyCode();

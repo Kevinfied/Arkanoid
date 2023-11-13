@@ -15,22 +15,35 @@ public class Ball {
 
 	public static double paddleBounce = 0;
 
+	public static boolean start;
+	public static boolean onPad;
+
 	// border is 27 pixels wide
 
-	Image ballIcon = new ImageIcon("vaus.png").getImage();
+	Image r = new ImageIcon("assets/Vaus.png").getImage();
     public Ball() {
-    	x = Globals.SCREEN_WIDTH/2;
-    	y = Globals.SCREEN_HEIGHT/2;
-		if(Util.randInt(0,1)==0){
-			vx = Util.randInt(-5,-4);
-		}
-		else{
-			vx = Util.randInt(4, 5);
-		}
-
-		vy = -6;
-
+		startPos();
+		onPad = true;
     }
+
+	public void startBall() {
+
+		onPaddle();
+
+		if (start) {
+			vx = Util.randInt(-5, 5);
+			vy = -6;
+			start = false;
+		}
+
+	}
+
+	public void launchBall() {
+		vx = Util.randInt(-5, 5);
+		vy = -6;
+		start = false;
+		onPad = false;
+	}
 
     public void wallBounce() {
 		int var = 3;
@@ -40,10 +53,7 @@ public class Ball {
 			vy*=-1;
 		}
 
-		if (y >= Globals.SCREEN_HEIGHT-Globals.BORDER_WIDTH) { // bouncing off the bottom wall for now
-			y = Globals.SCREEN_HEIGHT-Globals.BORDER_WIDTH - 1;
-			vy *= -1;
-		}
+
 
 		if(x<=0+Globals.BORDER_WIDTH || x>=Globals.SCREEN_WIDTH-WIDTH-Globals.BORDER_WIDTH){ // bounces off the left and right walls.
 			if (x <= 0 + Globals.BORDER_WIDTH) {
@@ -55,6 +65,22 @@ public class Ball {
 			vx*=-1;
 		}
 
+	}
+
+	public void deathCheck(Paddle player) {
+		if (y>=Globals.SCREEN_HEIGHT) {
+			startPos();
+			onPad = true;
+			player.deathReset();
+		}
+	}
+
+	public void startPos() {
+		x = Globals.SCREEN_WIDTH / 2;
+		y = Paddle.getY() - RADIUS;
+		System.out.println(y);
+		vx = 0;
+		vy = 0;
 	}
 
 	public void paddleBounce(Paddle play) {
@@ -73,18 +99,22 @@ public class Ball {
 	}
     public void move(){
 		// moving
-		x += vx;
-		y += vy;
-
+		if (onPad) {
+			onPaddle();
+		}
+		else {
+			x += vx;
+			y += vy;
+		}
 	}
 
 
-//	public void onPaddle() {
-//		// gotta check for the sticking powerup later
-//
-//		x = Paddle.getX() + Paddle.getWidth()/2 - WIDTH/2;
-//		y = Paddle.getY() - WIDTH;
-//	}
+	public void onPaddle() {
+		// gotta check for the sticking powerup later
+
+		x = Paddle.getX() + Paddle.getWidth()/2;
+		y = Paddle.getY() - RADIUS;
+	}
 
 
 	public void reset() {
@@ -95,47 +125,17 @@ public class Ball {
 
 	}
 
-	public void death() {
-		x = Globals.SCREEN_WIDTH/2;
-		y = Globals.SCREEN_HEIGHT/2;
-		vx = 0;
-		vy = 0;
+	public double derivatives(double num) {
+
+
+
+		return 0.0;
 	}
 
 
-	public int directionGet(int xx, int yy, double velX, double velY, Paddle play, Rectangle ball) {
-
-		int prevX = (int)(xx - velX);
-		int prevY = (int)(yy - velY);
 
 
-		Rectangle prevBallY = new Rectangle(xx, prevY, WIDTH, HEIGHT);
-		Rectangle prevBallX = new Rectangle(prevX, yy, WIDTH, HEIGHT);
 
-		if (!(prevBallY.intersects(play.getRect())) && !(prevBallX.intersects(play.getRect()))) {
-			System.out.println("DIAGONAL BOUNCE");
-			// 1 - both
-			return 1;
-		}
-
-		else if (!(prevBallY.intersects(play.getRect())) && (prevBallX.intersects(play.getRect()))) {
-			System.out.println("VERTICAL BOUNCE");
-			// 2 - y
-			return 2;
-		}
-
-		else if (!(prevBallX.intersects(play.getRect())) && (prevBallY.intersects(play.getRect()))) {
-			System.out.println("HORIZONTAL BOUNCE");
-			// 3 - x
-			return 3;
-		}
-
-		else {
-			System.out.println("BOUNCE ZERO");
-			// 0 - none
-			return 0;
-		}
-	}
     
 
 	public Rectangle prevPos(int velX, int velY) {
@@ -153,9 +153,14 @@ public class Ball {
 
 	// draws the ball
     public void draw(Graphics g){
-    	g.setColor(Color.WHITE);
-    	g.fillOval(x-(WIDTH/2),y-(HEIGHT/2),WIDTH,HEIGHT);
 
+		if (Paddle.egg) {
+			g.drawImage(r, x, y, null);
+		}
+		else {
+			g.setColor(Color.WHITE);
+			g.fillOval(x-(WIDTH/2),y-(HEIGHT/2),WIDTH,HEIGHT);
+		}
     }
 
 	public static int getX() {
@@ -180,6 +185,14 @@ public class Ball {
 
 	public static void setVelY(int n) {
 		vy = n;
+	}
+
+	public boolean getOnPad() {
+		return onPad;
+	}
+
+	public void setOnPad(boolean n) {
+		onPad = n;
 	}
 
 }

@@ -16,6 +16,7 @@ public class Level {
     Level (int lvl) {
 
         blocks = new ArrayList<Brick>();
+        goldBlocks = new ArrayList<Brick>();
 
         if (lvl == 1) {
             level = 1;
@@ -51,7 +52,7 @@ public class Level {
 
         if (lvl == 2) {
 
-            
+
 
 
 
