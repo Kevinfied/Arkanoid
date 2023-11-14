@@ -44,46 +44,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     Level one, two;
     Level level;
 
-//    public void startLevel(int lvl) {
-//
-//
-//        blocks = new ArrayList<Brick>();
-//        powerups = new ArrayList<Powerup>();
-//        lasers = new ArrayList<Laser>();
-//        explosions = new ArrayList<Point>();
-//
-//        if (lvl == 2){
-//            totalPoints = levels[1].getTotalPoints() + levels[2].getTotalPoints(); //the total points to clear the second level is the sum of the points to clear the 1st and 2nd levels
-//        }
-//
-//        if (lvl == 1){ //resets the lives and points if starting the first level
-//            points = 0;
-//            lives = levels[lvl].getLives();
-//            totalPoints = levels[lvl].getTotalPoints();
-//        }
-//
-//        for (Brick b : levels[lvl].getBlocks()){ //adds Blocks into the ArrayList<Block> blocks
-//            blocks.add(b);
-//        }
-//
-////        ball = new Ball(400, 600, 5);
-//        ball = new Ball();
-//
-//        //resets paddle and any activated Powerups on the last level's paddle
-////        paddle = new Paddle(400, 750);
-//        paddle = new Paddle();
-//        laserActive = false;
-//        catching = false;
-//
-//        start = true;
-//        curScreen = "LEVEL_"+lvl;
-//
-//
-//
-//
-//
-//    }
-
 
 
     public GamePanel(){
