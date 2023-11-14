@@ -19,15 +19,26 @@ public class Paddle {
 
     Image easterEgg = new ImageIcon("assets/Vaus.png").getImage();
     Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
+//    Image defaultIcon = Util.loadScaledImg("assets/Vaus/Arkanoid_Vaus.gif", WIDTH, HEIGHT);
+    Image defaultIcon = new ImageIcon("assets/Vaus/Arkanoid_Vaus.gif").getImage();
     public Paddle() {
+
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
 
         speed = 10;
         health = 3;
-        activePowerup = "None";
+        activePowerup = "Laser";
     }
-
+    public void powerupUpdate() {
+        if (activePowerup == "Enlarge") {
+            WIDTH = 120;
+        }
+        else {
+            WIDTH = 80;
+        }
+        icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
+    }
     
     public void draw(Graphics g){
 //    	g.setColor(Color.RED);
@@ -36,7 +47,7 @@ public class Paddle {
             g.drawImage(easterEgg, x, y, null);
         }
         else {
-            g.drawImage(icon, x, y, null);
+            g.drawImage(defaultIcon, x, y, WIDTH, HEIGHT, null);
         }
 
     }
@@ -146,7 +157,17 @@ public class Paddle {
         }
         return "None";
     }
-    
+
+    public static void setPowerup(String s) {
+    	activePowerup = s;
+        System.out.println("Powerup: " + activePowerup);
+        System.out.println("Health: " + health);
+    }
+
+    public static String getActivePowerup() {
+        return activePowerup;
+    }
+
 }
 
 

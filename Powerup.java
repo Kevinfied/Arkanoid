@@ -11,16 +11,24 @@ public class Powerup {
 
     public int x, y;
 //    public int vx, vy;
-    public int WIDTH = 20;
-    public int HEIGHT = 20;
+    public static int WIDTH = 30;
+    public static int HEIGHT = 15;
     public String type;
     public int speed;
+    public static final Image[] icons = {
+            new ImageIcon("assets/powerups/Player.gif").getImage(),
+            new ImageIcon("assets/powerups/Catch.gif").getImage(),
+            new ImageIcon("assets/powerups/Enlarge.gif").getImage(),
+            new ImageIcon("assets/powerups/Laser.gif").getImage()
+    };
+    public Image icon;
 
-    public Powerup(int xx, int yy, String t) {
+    public Powerup(int xx, int yy) {
         x = xx;
         y = yy;
-        type = t;
-        speed = 3;
+        type = names[Util.randInt(0, 3)];
+        speed = 1;
+        icon = icons[Arrays.asList(names).indexOf(type)];
     }
 
 
@@ -43,9 +51,32 @@ public class Powerup {
         return type;
     }
 
-    public void draw() {
+    public void draw(Graphics g) {
+//        g.setColor(Color.RED);
+//        g.fillRect(x, y, WIDTH, HEIGHT);
 
+//        if (type.equals("Player")) {
+//            g.setColor(Color.LIGHT_GRAY);
+//        }
+//        else if (type.equals("Catch")) {
+//            g.setColor(Color.GREEN);
+//        }
+//        else if (type.equals("Enlarge")) {
+//            g.setColor(Color.BLUE);
+//        }
+//        else if (type.equals("Laser")) {
+//            g.setColor(Color.RED);
+//        }
+//        g.fillRect(x, y, WIDTH, HEIGHT);
 
+        g.drawImage(icon, x, y, WIDTH, HEIGHT,null);
+    }
+
+    public static int getWidth() {
+        return WIDTH;
+    }
+    public static int getHeight() {
+        return HEIGHT;
     }
 
     public void drop() {
@@ -54,6 +85,7 @@ public class Powerup {
 
         }
     }
+
 
 
 }

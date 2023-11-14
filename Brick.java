@@ -112,15 +112,15 @@ public class Brick {
         return points;
     }
 
-    public void dropPowerup() {
-        int a = Util.randInt(0, 100);
-        if (a < 50) {
-            int b = Util.randInt(0, 3);
-            String type = Powerup.names[b];
-            Powerup p = new Powerup(x, y, type);
-            GamePanel.powerups.add(p);
-        }
-    }
+//    public void dropPowerup() {
+//        int a = Util.randInt(0, 100);
+//        if (a < 50) {
+//            int b = Util.randInt(0, 3);
+//            String type = Powerup.names[b];
+////            Powerup p = new Powerup(x, y, type);
+////            GamePanel.powerups.add(p);
+//        }
+//    }
 
     @Override
     public String toString() {
