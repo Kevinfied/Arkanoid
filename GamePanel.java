@@ -23,7 +23,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
     public ArrayList<Brick> blocks = new ArrayList<Brick>();
     public ArrayList<Brick> goldBlocks = new ArrayList<Brick>();
-    private ArrayList<Powerup> powerups;
+    public static ArrayList<Powerup> powerups;
     private ArrayList<Laser> lasers;
 
     private ArrayList<Point> explosions;
@@ -41,7 +41,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     private Sound music;
 
     private boolean start, catching, firstEver, laserActive;
-    Level one;
+    Level one, two;
+    Level level;
 
 //    public void startLevel(int lvl) {
 //
@@ -89,20 +90,20 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         screen = "intro";
         menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-//        menu = new ImageIcon("assets/intro.png").getImage();
-//        background = new ImageIcon("background.png").getImage();
         background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         keys = new boolean[KeyEvent.KEY_LAST+1];
         player = new Paddle();
         ball = new Ball();
+        powerups = new ArrayList<Powerup>();
 
-
-
-        one = new Level(1);
-        for (Brick e : one.getBlocks()){
+        level = new Level(2);
+        for (Brick e : level.getBlocks()) {
             blocks.add(e);
         }
 
+        for (Brick e : level.getGoldBlocks()) {
+            goldBlocks.add(e);
+        }
         blocksToDelete = new HashSet<>();
 
 //        for (Brick FR: blocks) {
@@ -139,7 +140,17 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                 }
 
             }
-
+        }
+        for (int i=0; i<goldBlocks.size(); i++) {
+            Brick b = goldBlocks.get(i);
+            if (ball.getRect().intersects(b.getRect())) {
+                if (!ball.prevPos(0, ball.vy).intersects(b.getRect())) {
+                    ball.vy *= -1;
+                }
+                if (!ball.prevPos(ball.vx, 0).intersects(b.getRect())) {
+                    ball.vx *= -1;
+                }
+            }
         }
     }
 
@@ -165,6 +176,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             ball.wallBounce();
             ball.deathCheck(player);
             ball.paddleBounce(player);
+            for (Powerup pu : powerups) {
+                pu.move();
+            }
         }
     }
     
@@ -242,15 +256,21 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         else if(screen == "game"){
             g.setColor(new Color(0,0,0));
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
+            Image background = level.getBackground();
             g.drawImage(background, 0, 0, null);
 
             for (Brick FR: blocks) {
                 FR.draw(g);
             }
 
+            for (Brick FR: goldBlocks) {
+                FR.draw(g);
+            }
+
             ball.draw(g);
             player.draw(g);
             g.setFont(fontSys);
+//            two.drawLevel(g, ball, player);
         }
     }
 }

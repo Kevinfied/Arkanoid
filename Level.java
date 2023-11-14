@@ -13,117 +13,83 @@ public class Level {
     private static int level;
     private ArrayList<Brick> blocks;
     private ArrayList<Brick> goldBlocks;
+
+    private Image background;
+
+    public int pointsToClear;
+
     Level (int lvl) {
 
         blocks = new ArrayList<Brick>();
         goldBlocks = new ArrayList<Brick>();
 
+        int var = 100;
+
         if (lvl == 1) {
             level = 1;
             lives = 3;
             totalPoints = 0;
-
+            pointsToClear = 7700;
+            background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
             // 2 * 2 * 2 * 5
 
-            for (int i=1; i<=14; i++) {
-                blocks.add(new Brick(i*40-20, 75, 40, 20,"Silver"));
-            }
 
-            for (int i=1; i<=14; i++) {
-                blocks.add(new Brick(i*40-20, 95, 40, 20,"Red"));
-            }
-
-            for (int i=1; i<=14; i++) {
-                blocks.add(new Brick(i*40-20, 115, 40, 20,"Yellow"));
-            }
-
-            for (int i=1; i<= 14; i++) {
-                blocks.add(new Brick(i*40-20, 135, 40, 20,"Blue"));
-            }
-
-            for (int i=1; i<=14; i++) {
-                blocks.add(new Brick(i*40-20, 155, 40, 20,"Violet"));
-            }
-
-            for (int i=1; i<=14; i++) {
-                blocks.add(new Brick(i*40-20, 175, 40, 20,"Green"));
+            for (int i = 1; i <= 14; i++) {
+                blocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Silver"));
+                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Yellow"));
+                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Violet"));
+                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Green"));
             }
 
 
+        }
         if (lvl == 2) {
+            level = 2;
+            lives = 3;
+            totalPoints = 0;
+            pointsToClear = 7700 + 5600;
+            background = Util.loadScaledImg("assets/backgrounds/background2.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+            // first row
+            for (int i = 2; i <= 4; i++) {
+                goldBlocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Gold"));
+                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Violet"));
+                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Cyan"));
+                blocks.add(new Brick(i * 40 - 20, 195 + var, 40, 20, "Orange"));
+                blocks.add(new Brick(i * 40 - 20, 215 + var, 40, 20, "Silver"));
+            }
 
+            for (int i = 6; i<=9; i++) {
+                blocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Silver"));
+                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Orange"));
+                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Cyan"));
+                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 195 + var, 40, 20, "Violet"));
+                goldBlocks.add(new Brick(i * 40 - 20, 215 + var, 40, 20, "Gold"));
+            }
 
+            for (int i = 11; i<=13; i++) {
+                goldBlocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Gold"));
+                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Violet"));
+                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Cyan"));
+                blocks.add(new Brick(i * 40 - 20, 195 + var, 40, 20, "Orange"));
+                blocks.add(new Brick(i * 40 - 20, 215 + var, 40, 20, "Silver"));
+            }
+
+            // second row
 
 
 
         }
-
-
-
-
-
-
-
-//            for (int i = 0; i < 8; i++) {
-//
-//                for (int j=100; j<700; j+= 100) {
-//
-//                    String blockColor = Brick.colors[i];
-//
-//                    if (i == 7 && (j == 300 || j == 400)) {
-//                        blockColor = "Gold";
-//                    }
-//                    else if (i == 5 && (j == 200 || j == 500)) {
-//                        blockColor = "Silver";
-//                    }
-//                    else if (i == 4 && (j == 30 || j == 400)) {
-//                        blockColor = "Silver";
-//                    }
-//
-//                    totalPoints += Brick.pointVals[Arrays.asList(Brick.colors).indexOf(blockColor)];
-//
-//                    blocks.add(new Brick(j, (8-i)*50 + 100, 100, 50, blockColor));
-//                }
-//
-//            }
-        }
-//        else if (lvl == 2) {
-//
-//            totalPoints = 0;
-//            level = 2;
-//
-//
-//            for (int k=0; k<8; k++) {
-//                for (int i=100; i<700; i+=100) {
-//                    String blockColor = Brick.colors[7-k];
-//
-//                    if (k == 3 && (i == 200 || i == 500)) {
-//                        blockColor = "Gold";
-//                    }
-//                    else if (k == 5 && (i == 300 || i == 400)) {
-////                        blockColor = "Silver";
-//                        continue;
-//                    }
-//
-//                    else if (k == 4 && (i == 30 || i == 400)) {
-//                        blockColor = "Silver";
-//                    }
-//
-//                    totalPoints += Brick.pointVals[Arrays.asList(Brick.colors).indexOf(blockColor)];
-//                    blocks.add (new Brick(i, (8-k)*50 + 50, 100, 50, blockColor));
-//
-//
-//                }
-//            }
-//
-//            blocks.add(new Brick(350, 200, 100, 50, "Silver"));
-//            totalPoints += 50;
-//
-//        }
-
-
-
-
     }
 
     public int getLevel() {
@@ -138,12 +104,38 @@ public class Level {
         return totalPoints;
     }
 
+    public int getPointsToClear() {
+        return pointsToClear;
+    }
+
     public ArrayList<Brick> getBlocks() {
         return blocks;
     }
 
     public ArrayList<Brick> getGoldBlocks() {
         return goldBlocks;
+    }
+
+    public Image getBackground() {
+        return background;
+    }
+
+    public void drawLevel(Graphics g, Ball ball, Paddle player) {
+
+        g.setColor(new Color(0,0,0));
+        g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
+        g.drawImage(background, 0, 0, null);
+        for (Brick b : blocks) {
+            b.draw(g);
+        }
+
+        for (Brick b : goldBlocks) {
+            b.draw(g);
+        }
+
+        ball.draw(g);
+        player.draw(g);
+
     }
 
 }

@@ -23,6 +23,8 @@ public class Powerup {
         speed = 3;
     }
 
+
+
     public void playerPowerup() {
         Paddle.addHealth(1);
     }
