@@ -13,7 +13,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     Ball ball;
     private boolean []keys;
 
-    Image menu, background;
+    Image menu, background, gameoverScreen, winScreen;
 
     Paddle player;
     int score1, score2;
@@ -23,7 +23,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     public ArrayList<Brick> blocks = new ArrayList<Brick>();
     public ArrayList<Brick> goldBlocks = new ArrayList<Brick>();
     public static ArrayList<Powerup> powerups;
+
     private ArrayList<Laser> lasers;
+
     private Set<Laser> lasersToDelete;
 
     private ArrayList<Point> explosions;
@@ -43,6 +45,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     private boolean start, catching, firstEver, laserActive;
     Level one, two;
     Level level;
+    int laserCooldown = 30;
 
 
 
@@ -51,13 +54,15 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         screen = "intro";
         menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        gameoverScreen = Util.loadScaledImg("assets/screens/gameover.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        winScreen = Util.loadScaledImg("assets/screens/win.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         keys = new boolean[KeyEvent.KEY_LAST+1];
         player = new Paddle();
         ball = new Ball();
         powerups = new ArrayList<Powerup>();
         lasers = new ArrayList<Laser>();
-
-        level = new Level(1);
+        curLevel = 1;
+        level = new Level(curLevel);
         for (Brick e : level.getBlocks()) {
             blocks.add(e);
         }
@@ -83,6 +88,11 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         timer.start();
         setPreferredSize(new Dimension(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
     }
+
+    public void breakDebug() {
+        blocks.remove(0);
+    }
+
 
     public void brickCollide() {
         for (int i=0; i<blocks.size(); i++) {
@@ -114,6 +124,23 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
     }
 
+    public void fireLaser() {
+        if (keys[KeyEvent.VK_SPACE]) {
+            if (ball.getOnPad()) {
+//                    ball.setStart(true);
+                ball.setOnPad(false);
+                ball.launchBall();
+            }
+            else {
+                if (player.getActivePowerup().equals("Laser") && laserCooldown <= 0) {
+                    laserCooldown = 30;
+                    lasers.add(new Laser(player.getX() + player.getWidth()/8, player.getY()));
+                    lasers.add(new Laser(player.getX() + player.getWidth()/8*7, player.getY()));
+                }
+            }
+//                ball.launchBall();
+        }
+    }
     public void laserCollide() {
 
         for (int i=0; i<lasers.size(); i++) {
@@ -125,6 +152,13 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
                     lasersToDelete.add(l);
                     blocksToDelete.add(b);
+                }
+            }
+            for (int q=0; q<goldBlocks.size(); q++) {
+                Brick gb = goldBlocks.get(q);
+
+                if (l.getRect().intersects(gb.getRect())) {
+                    lasersToDelete.add(l);
                 }
             }
         }
@@ -161,6 +195,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             if (p.getType().equals("Player")) {
                 player.addHealth(1);
             }
+            else if (p.getType().equals("Slow")) {
+                ball.slowPowerup();
+            }
             else {
                 player.setPowerup(p.getType());
                 player.powerupUpdate();
@@ -170,6 +207,25 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         powerupsToDelete.clear();
     }
 
+    public void progression() {
+        if (blocks.size() == 0) {
+            if (curLevel+1 <= 2) {
+                curLevel++;
+                level = new Level(curLevel);
+                for (Brick e : level.getBlocks()) {
+                    blocks.add(e);
+                }
+
+                for (Brick e : level.getGoldBlocks()) {
+                    goldBlocks.add(e);
+                }
+            }
+            else {
+                curLevel = 3;
+            }
+
+        }
+    }
 
 
     public void move(){
@@ -177,8 +233,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
 
         else if(screen == "game"){
-
-
             player.move(keys);
             ball.move();
             ball.wallBounce();
@@ -192,30 +246,30 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             }
         }
     }
-    
+
+    public void checkGameOver() {
+        if (player.getHealth() <= 0) {
+            screen = "Game Over";
+        }
+        if (curLevel == 3) {
+//            System.out.println("win");
+            screen = "Win";
+        }
+    }
+
+
     public void	keyPressed(KeyEvent e){
         int code = e.getKeyCode();
         keys[code] = true;
 
         if (screen == "game") {
-            if (code == KeyEvent.VK_SPACE) {
-                if (ball.getOnPad()) {
-//                    ball.setStart(true);
-                    ball.setOnPad(false);
-                    ball.launchBall();
-                }
-                else {
-                    if (player.getActivePowerup().equals("Laser")) {
-                        lasers.add(new Laser(player.getX() + player.getWidth()/2, player.getY()));
-                    }
-                }
-//                ball.launchBall();
-            }
             if (code == KeyEvent.VK_8) {
                 player.egg = true;
             }
+            if (code == KeyEvent.VK_B) {
+                breakDebug();
+            }
         }
-
     }
     public void	keyReleased(KeyEvent e){
         int code = e.getKeyCode();
@@ -235,8 +289,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         if(screen == "intro") {
             screen = "game";
         }
-
-
     }
     public void	mouseReleased(MouseEvent e) {}
 
@@ -255,7 +307,11 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         deleteBlocks();
         powerupCollide();
         deletePowerups();
+        fireLaser();
         laserCollide();
+        laserCooldown--;
+        progression();
+        checkGameOver();
         repaint();
     }
 
@@ -265,12 +321,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
         if(screen == "intro"){
             g.drawImage(menu,0,0,null);
-
-
         }
-
-
-
 
         else if(screen == "game"){
             g.setColor(new Color(0,0,0));
@@ -297,8 +348,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             ball.draw(g);
             player.draw(g);
             g.setFont(fontSys);
-//            two.drawLevel(g, ball, player);
+        }
+
+        else if (screen == "Game Over") {
+            g.drawImage(gameoverScreen, 0, 0, null);
+        }
+
+        else if (screen == "Win") {
+            g.drawImage(winScreen, 0, 0,null);
         }
     }
 }
-

@@ -14,9 +14,8 @@ public class Laser {
     public Laser(int xx, int yy) {
         x = xx;
         y = yy;
-        RADIUS = 2;
+        RADIUS = 4;
         speed = 5;
-
     }
 
 

@@ -25,5 +25,4 @@ public class Util {
 		Image img = loadImg(fileName);
 		return img.getScaledInstance(width, height, Image.SCALE_SMOOTH); //returns scaled image
 	}
-
 }

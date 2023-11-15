@@ -11,6 +11,7 @@ class Globals {
     public static final int SCREEN_HEIGHT = 800;
 
     public static final int BORDER_WIDTH = 20;
+    public static final int TOP_BORDER_HEIGHT = 100;
 
     public static final int TOP_SCREEN_HEIGHT = 100;
 

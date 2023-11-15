@@ -6,11 +6,11 @@ import java.util.*;
 
 public class Powerup {
 
-    public static final String[] names= {"Player", "Catch", "Enlarge", "Laser"};
+    public static final String[] names= {"Player", "Catch", "Enlarge", "Laser", "Slow"};
 
 
     public int x, y;
-//    public int vx, vy;
+
     public static int WIDTH = 30;
     public static int HEIGHT = 15;
     public String type;
@@ -19,14 +19,15 @@ public class Powerup {
             new ImageIcon("assets/powerups/Player.gif").getImage(),
             new ImageIcon("assets/powerups/Catch.gif").getImage(),
             new ImageIcon("assets/powerups/Enlarge.gif").getImage(),
-            new ImageIcon("assets/powerups/Laser.gif").getImage()
+            new ImageIcon("assets/powerups/Laser.gif").getImage(),
+            new ImageIcon("assets/powerups/Slow.gif").getImage()
     };
     public Image icon;
 
     public Powerup(int xx, int yy) {
         x = xx;
         y = yy;
-        type = names[Util.randInt(0, 3)];
+        type = names[Util.randInt(0, 4)];
         speed = 1;
         icon = icons[Arrays.asList(names).indexOf(type)];
     }
@@ -52,22 +53,6 @@ public class Powerup {
     }
 
     public void draw(Graphics g) {
-//        g.setColor(Color.RED);
-//        g.fillRect(x, y, WIDTH, HEIGHT);
-
-//        if (type.equals("Player")) {
-//            g.setColor(Color.LIGHT_GRAY);
-//        }
-//        else if (type.equals("Catch")) {
-//            g.setColor(Color.GREEN);
-//        }
-//        else if (type.equals("Enlarge")) {
-//            g.setColor(Color.BLUE);
-//        }
-//        else if (type.equals("Laser")) {
-//            g.setColor(Color.RED);
-//        }
-//        g.fillRect(x, y, WIDTH, HEIGHT);
 
         g.drawImage(icon, x, y, WIDTH, HEIGHT,null);
     }

@@ -23,7 +23,7 @@ public class Level {
         blocks = new ArrayList<Brick>();
         goldBlocks = new ArrayList<Brick>();
 
-        int var = 100;
+//        int Globals.TOP_BORDER_HEIGHT = 100;
 
         if (lvl == 1) {
             level = 1;
@@ -33,17 +33,14 @@ public class Level {
             background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
             // 2 * 2 * 2 * 5
 
-
             for (int i = 1; i <= 14; i++) {
-                blocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Silver"));
-                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Red"));
-                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Yellow"));
-                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Blue"));
-                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Violet"));
-                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 75 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Silver"));
+                blocks.add(new Brick(i * 40 - 20, 95 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 115 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Yellow"));
+                blocks.add(new Brick(i * 40 - 20, 135 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 155 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Violet"));
+                blocks.add(new Brick(i * 40 - 20, 175 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Green"));
             }
-
-
         }
         if (lvl == 2) {
             level = 2;
@@ -53,42 +50,46 @@ public class Level {
             background = Util.loadScaledImg("assets/backgrounds/background2.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
             // first row
             for (int i = 2; i <= 4; i++) {
-                goldBlocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Gold"));
-                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Violet"));
-                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Blue"));
-                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Red"));
-                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Green"));
-                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Cyan"));
-                blocks.add(new Brick(i * 40 - 20, 195 + var, 40, 20, "Orange"));
-                blocks.add(new Brick(i * 40 - 20, 215 + var, 40, 20, "Silver"));
+                goldBlocks.add(new Brick(i * 40 - 20, 75 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Gold"));
+                blocks.add(new Brick(i * 40 - 20, 95 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Violet"));
+                blocks.add(new Brick(i * 40 - 20, 115 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 135 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 155 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 175 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Cyan"));
+                blocks.add(new Brick(i * 40 - 20, 195 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Orange"));
+                blocks.add(new Brick(i * 40 - 20, 215 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Silver"));
             }
 
             for (int i = 6; i<=9; i++) {
-                blocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Silver"));
-                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Orange"));
-                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Cyan"));
-                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Green"));
-                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Red"));
-                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Blue"));
-                blocks.add(new Brick(i * 40 - 20, 195 + var, 40, 20, "Violet"));
-                goldBlocks.add(new Brick(i * 40 - 20, 215 + var, 40, 20, "Gold"));
+                blocks.add(new Brick(i * 40 - 20, 75 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Silver"));
+                blocks.add(new Brick(i * 40 - 20, 95 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Orange"));
+                blocks.add(new Brick(i * 40 - 20, 115 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Cyan"));
+                blocks.add(new Brick(i * 40 - 20, 135 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 155 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 175 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 195 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Violet"));
+                goldBlocks.add(new Brick(i * 40 - 20, 215 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Gold"));
             }
 
             for (int i = 11; i<=13; i++) {
-                goldBlocks.add(new Brick(i * 40 - 20, 75 + var, 40, 20, "Gold"));
-                blocks.add(new Brick(i * 40 - 20, 95 + var, 40, 20, "Violet"));
-                blocks.add(new Brick(i * 40 - 20, 115 + var, 40, 20, "Blue"));
-                blocks.add(new Brick(i * 40 - 20, 135 + var, 40, 20, "Red"));
-                blocks.add(new Brick(i * 40 - 20, 155 + var, 40, 20, "Green"));
-                blocks.add(new Brick(i * 40 - 20, 175 + var, 40, 20, "Cyan"));
-                blocks.add(new Brick(i * 40 - 20, 195 + var, 40, 20, "Orange"));
-                blocks.add(new Brick(i * 40 - 20, 215 + var, 40, 20, "Silver"));
+                goldBlocks.add(new Brick(i * 40 - 20, 75 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Gold"));
+                blocks.add(new Brick(i * 40 - 20, 95 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Violet"));
+                blocks.add(new Brick(i * 40 - 20, 115 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Blue"));
+                blocks.add(new Brick(i * 40 - 20, 135 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Red"));
+                blocks.add(new Brick(i * 40 - 20, 155 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Green"));
+                blocks.add(new Brick(i * 40 - 20, 175 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Cyan"));
+                blocks.add(new Brick(i * 40 - 20, 195 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Orange"));
+                blocks.add(new Brick(i * 40 - 20, 215 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Silver"));
             }
 
             // second row
 
 
 
+        }
+        if (lvl == 99) {
+            // secret level :)
+            level = 99;
         }
     }
 

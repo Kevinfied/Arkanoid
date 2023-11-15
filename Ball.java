@@ -7,8 +7,6 @@ public class Ball {
 	private static int x,y;
 //	private static double vx,vy;
 	public static int vx, vy;
-	private static double radius;
-
 
 	private static final int WIDTH = 12, HEIGHT = 12;
 	private static final int RADIUS = WIDTH/2;
@@ -32,15 +30,17 @@ public class Ball {
 
 		if (start) {
 			vx = Util.randInt(-5, 5);
-			vy = -6;
+			vy = -5;
 			start = false;
 		}
 
 	}
 
+
+
 	public void launchBall() {
 		vx = Util.randInt(-5, 5);
-		vy = -6;
+		vy = -5;
 		start = false;
 		onPad = false;
 	}
@@ -48,13 +48,11 @@ public class Ball {
     public void wallBounce() {
 		int var = 3;
 		if(y<=0+Globals.BORDER_WIDTH+var){ // bounces off the top wall
-
 			y = Globals.BORDER_WIDTH+1+var;
 			vy*=-1;
 		}
 
-
-
+		// bounces off side walls
 		if(x<=0+Globals.BORDER_WIDTH || x>=Globals.SCREEN_WIDTH-WIDTH-Globals.BORDER_WIDTH){ // bounces off the left and right walls.
 			if (x <= 0 + Globals.BORDER_WIDTH) {
 				x = 1+Globals.BORDER_WIDTH;
@@ -70,6 +68,7 @@ public class Ball {
 	public void deathCheck(Paddle player) {
 		if (y>=Globals.SCREEN_HEIGHT) {
 			startPos();
+			Paddle.loseHealth();
 			onPad = true;
 			player.deathReset();
 		}
@@ -162,6 +161,12 @@ public class Ball {
 			g.fillOval(x-(WIDTH/2),y-(HEIGHT/2),WIDTH,HEIGHT);
 		}
     }
+
+	public void slowPowerup() {
+		vx *= 0.7;
+		vy *= 0.7;
+	}
+
 
 	public static int getX() {
 		return x;

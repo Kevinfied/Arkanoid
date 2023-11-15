@@ -1,3 +1,10 @@
+/*
+    Paddle.java
+    Kevin Xu
+
+
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,25 +14,23 @@ public class Paddle {
     private static int WIDTH = 80;
     private static int HEIGHT = 20;
     private static int speed;
-
-//    private Image easterEgg;
-    public static boolean egg;
+    public static boolean egg; // :)
     public static String activePowerup;
     public static int health;
 
-//    private Image icon;
-    int w = 80;
-    int h = 20;
 
     Image easterEgg = new ImageIcon("assets/Vaus.png").getImage();
     Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
 //    Image defaultIcon = Util.loadScaledImg("assets/Vaus/Arkanoid_Vaus.gif", WIDTH, HEIGHT);
-    Image defaultIcon = new ImageIcon("assets/Vaus/Arkanoid_Vaus.gif").getImage();
-    public Paddle() {
 
+    // all progress is hindered by a GIF 😱😱😱😱😱
+
+    // nvm i got it 🎉
+    Image defaultIcon = new ImageIcon("assets/Vaus/default.gif").getImage();
+    Image laserIcon = new ImageIcon("assets/Vaus/laser.gif").getImage();
+    public Paddle() {
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
-
         speed = 10;
         health = 3;
         activePowerup = "Laser";
@@ -37,19 +42,18 @@ public class Paddle {
         else {
             WIDTH = 80;
         }
-        icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
     }
     
     public void draw(Graphics g){
-//    	g.setColor(Color.RED);
-//    	g.fillRect(x,y,w,h);
         if (egg) {
             g.drawImage(easterEgg, x, y, null);
+        }
+        else if (activePowerup == "Laser") {
+            g.drawImage(laserIcon, x, y, WIDTH, HEIGHT, null);
         }
         else {
             g.drawImage(defaultIcon, x, y, WIDTH, HEIGHT, null);
         }
-
     }
 
     public void deathReset() {
@@ -60,16 +64,14 @@ public class Paddle {
     public void setSpeed(int s){
         speed = s;
     }
-    
     public void moveLeft(){
         x -= speed;
     }
-
     public void moveRight(){
         x += speed;
     }
-
     public void move(boolean []keys) {
+
         int leftKey = KeyEvent.VK_LEFT;
         int rightKey = KeyEvent.VK_RIGHT;
         int leftA = KeyEvent.VK_A;
@@ -79,7 +81,6 @@ public class Paddle {
         if ((keys[leftKey] || keys[leftA]) && (x - (speed/2) > 0+Globals.BORDER_WIDTH)) {
             moveLeft();
         }
-
 
         if ((keys[rightKey] || keys[rightD]) && (x + (speed/2) < Globals.SCREEN_WIDTH - WIDTH - Globals.BORDER_WIDTH-2)) {
             moveRight();
@@ -123,7 +124,6 @@ public class Paddle {
         else {
             x = n;
         }
-//        x = n;
     }
 
     public void setY(int n) {
@@ -138,24 +138,8 @@ public class Paddle {
         health += n;
     }
 
-
-    public String getRandomPowerup() {
-        if (Util.randInt(0, 2) == 1) {
-            int a = Util.randInt(0, 100);
-            if (a < 50) {
-                return "Player";
-            }
-            else if (a < 75) {
-                return "Catch";
-            }
-            else if (a < 90) {
-                return "Enlarge";
-            }
-            else {
-                return "Laser";
-            }
-        }
-        return "None";
+    public static void loseHealth() {
+    	health--;
     }
 
     public static void setPowerup(String s) {
