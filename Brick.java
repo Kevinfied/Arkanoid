@@ -9,9 +9,9 @@ public class Brick {
 
 //    private String[] colors
     private int x, y;
-    public static final String[] colors = {"White", "Orange", "Cyan", "Green", "Red", "Blue", "Violet", "Yellow", "Gold", "Silver"};
+    private static final String[] colors = {"White", "Orange", "Cyan", "Green", "Red", "Blue", "Violet", "Yellow", "Gold", "Silver"};
 
-    public static final int[] pointVals = {50,      60,        70,     80,      90,    100,     110,      120,      0,      50};
+    private static final int[] pointVals = {50,      60,        70,     80,      90,    100,     110,      120,      0,      50};
     private int WIDTH, HEIGHT;
 
     private int health;
@@ -112,15 +112,7 @@ public class Brick {
         return points;
     }
 
-//    public void dropPowerup() {
-//        int a = Util.randInt(0, 100);
-//        if (a < 50) {
-//            int b = Util.randInt(0, 3);
-//            String type = Powerup.names[b];
-////            Powerup p = new Powerup(x, y, type);
-////            GamePanel.powerups.add(p);
-//        }
-//    }
+
 
     @Override
     public String toString() {

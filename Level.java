@@ -16,21 +16,21 @@ public class Level {
 
     private Image background;
 
-    public int pointsToClear;
-
-    Level (int lvl) {
+    private int pointsToClear;
+    private Image lvl1Background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT-Globals.TOP_BORDER_HEIGHT);
+    private Image lvl2Background = Util.loadScaledImg("assets/backgrounds/background2.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT-Globals.TOP_BORDER_HEIGHT);
+    public Level (int lvl) {
 
         blocks = new ArrayList<Brick>();
         goldBlocks = new ArrayList<Brick>();
 
-//        int Globals.TOP_BORDER_HEIGHT = 100;
 
         if (lvl == 1) {
             level = 1;
             lives = 3;
             totalPoints = 0;
             pointsToClear = 7700;
-            background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+            background = lvl1Background;
             // 2 * 2 * 2 * 5
 
             for (int i = 1; i <= 14; i++) {
@@ -47,7 +47,7 @@ public class Level {
             lives = 3;
             totalPoints = 0;
             pointsToClear = 7700 + 5600;
-            background = Util.loadScaledImg("assets/backgrounds/background2.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+            background = lvl2Background;
             // first row
             for (int i = 2; i <= 4; i++) {
                 goldBlocks.add(new Brick(i * 40 - 20, 75 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Gold"));
@@ -125,7 +125,7 @@ public class Level {
 
         g.setColor(new Color(0,0,0));
         g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
-        g.drawImage(background, 0, 0, null);
+        g.drawImage(background, 0, Globals.TOP_BORDER_HEIGHT, null);
         for (Brick b : blocks) {
             b.draw(g);
         }

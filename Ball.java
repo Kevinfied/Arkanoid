@@ -6,19 +6,19 @@ import javax.swing.*;
 public class Ball {
 	private static int x,y;
 //	private static double vx,vy;
-	public static int vx, vy;
+	private static int vx, vy;
 
 	private static final int WIDTH = 12, HEIGHT = 12;
 	private static final int RADIUS = WIDTH/2;
 
-	public static double paddleBounce = 0;
+	private static double paddleBounce = 0;
 
-	public static boolean start;
-	public static boolean onPad, stick;
-	public static boolean slowing;
-	public static int slowTimer = 0;
-	public static int slowCounter = 0;
-	public int stickDist;
+	private static boolean start;
+	private static boolean onPad, stick;
+	private static boolean slowing;
+	private static int slowTimer = 0;
+	private static int slowCounter = 0;
+	private int stickDist;
 
 	// border is 27 pixels wide
 
@@ -37,7 +37,6 @@ public class Ball {
 			vy = -5;
 			start = false;
 		}
-
 	}
 
 
@@ -45,14 +44,15 @@ public class Ball {
 	public void launchBall() {
 		vx = Util.randInt(-5, 5);
 		vy = -5;
+//		vx = 0;
 		start = false;
 		onPad = false;
 	}
 
     public void wallBounce() {
-		int var = 3;
-		if(y<=0+Globals.BORDER_WIDTH+var){ // bounces off the top wall
-			y = Globals.BORDER_WIDTH+1+var;
+		int var = 3; // small offset from the top border
+		if(y<=0+Globals.BORDER_WIDTH+var+Globals.TOP_BORDER_HEIGHT){ // bounces off the top wall
+			y = Globals.BORDER_WIDTH+1+var+Globals.TOP_BORDER_HEIGHT;
 			vy*=-1;
 		}
 
@@ -69,7 +69,17 @@ public class Ball {
 
 	}
 	
-
+	public int ballDirection() {
+		if (vx < 0) {
+			return 1;
+		}
+		if (vx > 0) {
+			return 2;
+		}
+		else {
+			return 3;
+		}
+	}
 	
 	public boolean deathCheck(Paddle player) {
 		if (y>=Globals.SCREEN_HEIGHT) {
@@ -85,6 +95,7 @@ public class Ball {
 	public void startPos() {
 		x = Globals.SCREEN_WIDTH / 2;
 		y = Paddle.getY() - RADIUS;
+
 		System.out.println(y);
 		vx = 0;
 		vy = 0;
@@ -94,11 +105,26 @@ public class Ball {
 		Rectangle ball = getRect();
 		// bouncing off the paddle
 		if (ball.intersects(play.getRect())) {
+			double speed = Math.pow(vx, 2) + Math.pow(vy, 2);
 			if (!prevPos(0, vy).intersects(play.getRect())) {
+
+				if (x < play.getX() + play.getWidth()/2) {
+					vx = -1 * (int) (speed - Math.pow(vy, 2));
+				}
+				else {
+					vx = (int) (speed - Math.pow(vy, 2));
+				}
 				vy *= -1;
 			}
 
+
 			if (!prevPos(vx, 0).intersects(play.getRect())) {
+//				if (x < play.getX() + play.getWidth()/2) {
+//					vx = -1 * (int) (speed - Math.pow(vy, 2));
+//				}
+//				else {
+//					vx = (int) (speed - Math.pow(vy, 2));
+//				}
 				vx *= -1;
 			}
 
@@ -169,7 +195,7 @@ public class Ball {
 	// draws the ball
     public void draw(Graphics g){
 
-		if (Paddle.egg) {
+		if (Paddle.getEgg()) {
 			g.drawImage(r, x, y, null);
 		}
 		else {
@@ -182,11 +208,17 @@ public class Ball {
 		slowing = true;
 		slowTimer += 1000;
 		slowCounter++;
-		vx *= 0.7;
-		vy *= 0.7;
-		if (vx < 1 && vx > -1) {
-			vx = 1;
+		if (vx == 0) {
+			vx = vx;
 		}
+		else {
+			vx *= 0.7;
+			if (vx < 1 && vx > -1) {
+				vx = 1;
+			}
+		}
+		vy *= 0.7;
+
 		if (vy < 1 && vy > -1) {
 			vy = 1;
 		}
@@ -211,7 +243,7 @@ public class Ball {
 		if (vx < 0) {
 			vx--;
 		}
-		else {
+		else if (vx > 0) {
 			vx++;
 		}
 		if (vy < 0) {

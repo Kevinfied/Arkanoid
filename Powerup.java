@@ -6,23 +6,23 @@ import java.util.*;
 
 public class Powerup {
 
-    public static final String[] names= {"Player", "Enlarge", "Laser", "Slow"};
+    private static final String[] names= {"Player", "Enlarge", "Laser", "Slow"};
 
 
-    public int x, y;
+    private int x, y;
 
-    public static int WIDTH = 30;
-    public static int HEIGHT = 15;
-    public String type;
-    public int speed;
-    public static final Image[] icons = {
+    private static int WIDTH = 30;
+    private static int HEIGHT = 15;
+    private String type;
+    private int speed;
+    private static final Image[] icons = {
             new ImageIcon("assets/powerups/Player.gif").getImage(),
 
             new ImageIcon("assets/powerups/Enlarge.gif").getImage(),
             new ImageIcon("assets/powerups/Laser.gif").getImage(),
             new ImageIcon("assets/powerups/Slow.gif").getImage()
     };
-    public Image icon;
+    private Image icon;
 
     public Powerup(int xx, int yy) {
         x = xx;

@@ -10,37 +10,37 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Paddle {
-    public static int x, y;
+    private static int x, y;
     private static int WIDTH = 80;
     private static int HEIGHT = 20;
     private static int speed;
-    public static boolean egg; // :)
-    public static String activePowerup;
-    public static int health;
+    private static boolean egg; // :)
+    private static String activePowerup;
+    private static int health;
 
 
-    Image easterEgg = new ImageIcon("assets/Vaus.png").getImage();
-    Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
-    Image lifeIcon = Util.loadScaledImg("assets/Vaus/lives.png", 15, 15);
+    private Image easterEgg = new ImageIcon("assets/Vaus.png").getImage();
+//    Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
+    private Image lifeIcon = Util.loadScaledImg("assets/Vaus/lives.png", 15, 15);
 //    Image defaultIcon = Util.loadScaledImg("assets/Vaus/Arkanoid_Vaus.gif", WIDTH, HEIGHT);
 
     // all progress is hindered by a GIF 😱😱😱😱😱
 
     // nvm i got it 🎉
-    Image defaultIcon = new ImageIcon("assets/Vaus/default.gif").getImage();
-    Image laserIcon = new ImageIcon("assets/Vaus/laser.gif").getImage();
+    private Image defaultIcon = new ImageIcon("assets/Vaus/default.gif").getImage();
+    private Image laserIcon = new ImageIcon("assets/Vaus/laser.gif").getImage();
     public Paddle() {
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
         speed = 10;
         health = 3;
-        activePowerup = "Laser";
+        activePowerup = "None";
     }
     public static void powerupUpdate() {
         if (activePowerup == "Enlarge") {
             WIDTH = 120;
         }
-        else {
+        else if (activePowerup != "Enlarge"){
             WIDTH = 80;
         }
     }
@@ -166,6 +166,13 @@ public class Paddle {
         powerupUpdate();
     }
 
+    public static void setEgg(boolean flag) {
+        egg = flag;
+    }
+
+    public static boolean getEgg() {
+        return egg;
+    }
 }
 
 

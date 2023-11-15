@@ -4,21 +4,22 @@ import javax.swing.*;
 import javax.swing.Timer;
 import java.util.*;
 import java.util.ArrayList;
+import java.io.*;
 
 import java.util.Set;
 
 
 class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener, MouseMotionListener {
-    Timer timer;
-    Ball ball;
+    private Timer timer;
+    private Ball ball;
     private boolean []keys;
 
-    Image menu, background, gameoverScreen, winScreen;
+    private Image menu, background, gameoverScreen, winScreen;
 
-    Paddle player;
+    private Paddle player;
     int score1, score2;
-    Font fontSys;
-    String screen;
+//    Font fontSys, fontLocal;
+    private String screen;
 
     public ArrayList<Brick> blocks = new ArrayList<Brick>();
     public ArrayList<Brick> goldBlocks = new ArrayList<Brick>();
@@ -37,20 +38,29 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     private Point mouse, offset;
     private int points, lives, totalPoints, highScore, startFrame, curLevel, loadFrame;
 
-    private String curScreen; //which screen the player is currently on
     private Level [] levels; //levels[i] stores starting info for the ith level
-    private Font fontLocal; //Font used for text to be drawn on screen
+    private Font fontLocal, fontSys; //Font used for text to be drawn on screen
     private Sound music;
 
     private boolean start, catching, firstEver, laserActive;
-    Level one, two;
-    Level level;
-    int laserCooldown = 30;
+    private Level one, two;
+    private Level level;
+    private int laserCooldown = 30;
 
 
 
     public GamePanel(){
         fontSys = new Font("Montserat", Font.PLAIN, 32);
+        try{
+            File fntFile = new File("assets/Fonts/pixela-extreme.ttf");
+            fontLocal = Font.createFont(Font.TRUETYPE_FONT, fntFile).deriveFont(32f);
+        }
+        catch(IOException ex){
+            System.out.println(ex);
+        }
+        catch(FontFormatException ex){
+            System.out.println(ex);
+        }
         screen = "intro";
         menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
@@ -98,12 +108,17 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         for (int i=0; i<blocks.size(); i++) {
             Brick b = blocks.get(i);
             if (ball.getRect().intersects(b.getRect())) {
-                if (!ball.prevPos(0, ball.vy).intersects(b.getRect())) {
-                    ball.vy *= -1;
+                int bx = ball.getVelX();
+                int by = ball.getVelY();
+                if (!ball.prevPos(0, by).intersects(b.getRect())) {
+
+                    ball.setVelY(ball.getVelY() * -1);
+//                    ball.vy *= -1;
                 }
-                if (!ball.prevPos(ball.vx, 0).intersects(b.getRect())) {
-                    ball.vx *= -1;
+                if (!ball.prevPos(ball.getVelX(), 0).intersects(b.getRect())) {
+                    ball.setVelX(ball.getVelX() * -1);
                 }
+
                 b.lowerHealth(1);
                 if (blocks.get(i).getHealth() <= 0){ //if the Block is broken
                     blocksToDelete.add(blocks.get(i));
@@ -114,11 +129,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         for (int i=0; i<goldBlocks.size(); i++) {
             Brick b = goldBlocks.get(i);
             if (ball.getRect().intersects(b.getRect())) {
-                if (!ball.prevPos(0, ball.vy).intersects(b.getRect())) {
-                    ball.vy *= -1;
+                if (!ball.prevPos(0, ball.getVelY()).intersects(b.getRect())) {
+                    ball.setVelY(ball.getVelY() * -1);
+//                    ball.vy *= -1;
                 }
-                if (!ball.prevPos(ball.vx, 0).intersects(b.getRect())) {
-                    ball.vx *= -1;
+                if (!ball.prevPos(ball.getVelX(), 0).intersects(b.getRect())) {
+                    ball.setVelX(ball.getVelX() * -1);
+                    //                    ball.vx *= -1;
+
                 }
             }
         }
@@ -160,6 +178,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                 if (l.getRect().intersects(gb.getRect())) {
                     lasersToDelete.add(l);
                 }
+            }
+            if (l.getY() < 0+Globals.TOP_BORDER_HEIGHT + Globals.BORDER_WIDTH) {
+                lasersToDelete.add(l);
             }
         }
         for (Laser l:lasersToDelete) {
@@ -211,6 +232,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         if (blocks.size() == 0) {
             if (curLevel+1 <= 2) {
                 curLevel++;
+                player.deathReset();
+                ball.setOnPad(true);
+                ball.startPos();
                 level = new Level(curLevel);
                 for (Brick e : level.getBlocks()) {
                     blocks.add(e);
@@ -219,6 +243,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                 for (Brick e : level.getGoldBlocks()) {
                     goldBlocks.add(e);
                 }
+
+                powerups.clear();
+                lasers.clear();
             }
             else {
                 curLevel = 3;
@@ -267,10 +294,13 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
         if (screen == "game") {
             if (code == KeyEvent.VK_8) {
-                player.egg = true;
+                player.setEgg(true);
             }
             if (code == KeyEvent.VK_B) {
                 breakDebug();
+            }
+            if (code == KeyEvent.VK_L) {
+                Paddle.setPowerup("Laser");
             }
         }
     }
@@ -331,7 +361,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             g.setColor(new Color(0,0,0));
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             Image background = level.getBackground();
-            g.drawImage(background, 0, 0, null);
+            g.drawImage(background, 0, Globals.TOP_BORDER_HEIGHT, null);
 
             for (Brick FR: blocks) {
                 FR.draw(g);
@@ -352,7 +382,10 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             ball.draw(g);
             player.draw(g);
             player.drawLives(g);
-            g.setFont(fontSys);
+
+
+            g.setFont(fontLocal);
+            g.drawString("Score: " + points, 20, 50);
         }
 
         else if (screen == "Game Over") {
