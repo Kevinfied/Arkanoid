@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Powerup {
 
-    public static final String[] names= {"Player", "Catch", "Enlarge", "Laser", "Slow"};
+    public static final String[] names= {"Player", "Enlarge", "Laser", "Slow"};
 
 
     public int x, y;
@@ -17,7 +17,7 @@ public class Powerup {
     public int speed;
     public static final Image[] icons = {
             new ImageIcon("assets/powerups/Player.gif").getImage(),
-            new ImageIcon("assets/powerups/Catch.gif").getImage(),
+
             new ImageIcon("assets/powerups/Enlarge.gif").getImage(),
             new ImageIcon("assets/powerups/Laser.gif").getImage(),
             new ImageIcon("assets/powerups/Slow.gif").getImage()
@@ -27,7 +27,7 @@ public class Powerup {
     public Powerup(int xx, int yy) {
         x = xx;
         y = yy;
-        type = names[Util.randInt(0, 4)];
+        type = names[Util.randInt(0, names.length-1)];
         speed = 1;
         icon = icons[Arrays.asList(names).indexOf(type)];
     }

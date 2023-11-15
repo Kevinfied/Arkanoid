@@ -236,7 +236,10 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             player.move(keys);
             ball.move();
             ball.wallBounce();
-            ball.deathCheck(player);
+            if (ball.deathCheck(player)) {
+                powerups.clear();
+            }
+//            ball.deathCheck(player);
             ball.paddleBounce(player);
             for (Powerup pu : powerups) {
                 pu.move();
@@ -310,6 +313,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         fireLaser();
         laserCollide();
         laserCooldown--;
+        ball.slowTimer();
         progression();
         checkGameOver();
         repaint();
@@ -347,6 +351,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
             ball.draw(g);
             player.draw(g);
+            player.drawLives(g);
             g.setFont(fontSys);
         }
 

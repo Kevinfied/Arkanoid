@@ -21,6 +21,7 @@ public class Paddle {
 
     Image easterEgg = new ImageIcon("assets/Vaus.png").getImage();
     Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
+    Image lifeIcon = Util.loadScaledImg("assets/Vaus/lives.png", 15, 15);
 //    Image defaultIcon = Util.loadScaledImg("assets/Vaus/Arkanoid_Vaus.gif", WIDTH, HEIGHT);
 
     // all progress is hindered by a GIF 😱😱😱😱😱
@@ -35,7 +36,7 @@ public class Paddle {
         health = 3;
         activePowerup = "Laser";
     }
-    public void powerupUpdate() {
+    public static void powerupUpdate() {
         if (activePowerup == "Enlarge") {
             WIDTH = 120;
         }
@@ -56,9 +57,16 @@ public class Paddle {
         }
     }
 
+    public void drawLives(Graphics g) {
+        for (int i=0; i<health-1; i++) {
+            g.drawImage(lifeIcon, 20 + (i*15), Globals.SCREEN_HEIGHT-15, null);
+        }
+    }
+
     public void deathReset() {
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
+        clearPowerups();
     }
 
     public void setSpeed(int s){
@@ -150,6 +158,12 @@ public class Paddle {
 
     public static String getActivePowerup() {
         return activePowerup;
+    }
+
+    public static void clearPowerups() {
+        Ball.clearPowerups();
+    	activePowerup = "None";
+        powerupUpdate();
     }
 
 }

@@ -14,7 +14,11 @@ public class Ball {
 	public static double paddleBounce = 0;
 
 	public static boolean start;
-	public static boolean onPad;
+	public static boolean onPad, stick;
+	public static boolean slowing;
+	public static int slowTimer = 0;
+	public static int slowCounter = 0;
+	public int stickDist;
 
 	// border is 27 pixels wide
 
@@ -64,14 +68,18 @@ public class Ball {
 		}
 
 	}
+	
 
-	public void deathCheck(Paddle player) {
+	
+	public boolean deathCheck(Paddle player) {
 		if (y>=Globals.SCREEN_HEIGHT) {
 			startPos();
 			Paddle.loseHealth();
 			onPad = true;
 			player.deathReset();
+			return true;
 		}
+		return false;
 	}
 
 	public void startPos() {
@@ -95,11 +103,21 @@ public class Ball {
 			}
 
 		}
+		if (Paddle.getActivePowerup() == "Catch") {
+			stick = true;
+			stickDist = x - Paddle.getX();
+		}
+		else {
+			stick = false;
+		}
 	}
     public void move(){
 		// moving
 		if (onPad) {
 			onPaddle();
+		}
+		else if (stick) {
+			stick(stickDist);
 		}
 		else {
 			x += vx;
@@ -111,7 +129,13 @@ public class Ball {
 	public void onPaddle() {
 		// gotta check for the sticking powerup later
 
+
 		x = Paddle.getX() + Paddle.getWidth()/2;
+		y = Paddle.getY() - RADIUS;
+	}
+
+	public void stick(int dist) {
+		x = Paddle.getX() + dist;
 		y = Paddle.getY() - RADIUS;
 	}
 
@@ -126,16 +150,8 @@ public class Ball {
 
 	public double derivatives(double num) {
 
-
-
 		return 0.0;
 	}
-
-
-
-
-
-    
 
 	public Rectangle prevPos(int velX, int velY) {
 
@@ -163,10 +179,58 @@ public class Ball {
     }
 
 	public void slowPowerup() {
+		slowing = true;
+		slowTimer += 1000;
+		slowCounter++;
 		vx *= 0.7;
 		vy *= 0.7;
+		if (vx < 1 && vx > -1) {
+			vx = 1;
+		}
+		if (vy < 1 && vy > -1) {
+			vy = 1;
+		}
 	}
 
+	public void slowTimer() {
+		if (slowTimer > 0) {
+			slowTimer--;
+			System.out.println(slowTimer);
+		}
+		else if (slowTimer <= 0 && slowing) {
+			resetSpeed(slowCounter);
+			slowing = false;
+			slowTimer = 0;
+			slowCounter = 0;
+		}
+	}
+
+	public static void resetSpeed(int counter) {
+		vx /= Math.pow(0.7, counter);
+		vy /= Math.pow(0.7, counter);
+		if (vx < 0) {
+			vx--;
+		}
+		else {
+			vx++;
+		}
+		if (vy < 0) {
+			vy--;
+		}
+		else {
+			vy++;
+		}
+		System.out.printf("vx: %d, vy: %d\n", vx, vy);
+	}
+
+	public static void clearPowerups() {
+		resetSpeed(slowCounter);
+		stick = false;
+		slowing = false;
+		slowTimer = 0;
+		slowCounter = 0;
+
+	}
 
 	public static int getX() {
 		return x;
