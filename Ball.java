@@ -1,3 +1,11 @@
+/*
+	Ball.java
+	Kevin Xu
+
+
+ */
+
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -98,18 +106,6 @@ public class Ball {
 		}
 		return 2;
 	}
-//	public int paddlePos(Paddle p1){
-//		if(x > p1.getX()+p1.getWidth()/3*2){
-//			return 2;
-//		}
-//		if(x > p1.getX()+p1.getWidth()/3 && x < p1.getX()+p1.getWidth()/3){
-//			return 1;
-//		}
-//		if(x > p1.getX()){
-//			return 0;
-//		}
-//		return 3;
-//	}
 
 
 	public void paddleBounce(Paddle play) {

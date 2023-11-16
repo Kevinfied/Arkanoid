@@ -1,3 +1,10 @@
+/*
+    * GamePanel.java
+    * Kevin Xu
+    *
+    * This class is the main class that runs the game. All the action happens here!
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -5,51 +12,42 @@ import javax.swing.Timer;
 import java.util.*;
 import java.util.ArrayList;
 import java.io.*;
-
 import java.util.Set;
 
 
 class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener, MouseMotionListener {
-    private Timer timer;
-    private Ball ball;
-    private boolean []keys;
+    private Timer timer; // timer that runs the game
+    private Ball ball; // ball
+    private boolean []keys; // array of key states
 
-    private Image menu, background, gameoverScreen, winScreen, introScreen, menuScreen;
+    private Image gameoverScreen, winScreen, introScreen; // screen backgrounds
 
-    private Paddle player;
-    int score1, score2;
-//    Font fontSys, fontLocal;
-    private String screen;
+    private Paddle player; // paddle
 
-    public ArrayList<Brick> blocks = new ArrayList<Brick>();
-    public ArrayList<Brick> goldBlocks = new ArrayList<Brick>();
-    public static ArrayList<Powerup> powerups;
+    private String screen; // current screen
 
-    private ArrayList<Laser> lasers;
+    private ArrayList<Brick> blocks = new ArrayList<Brick>(); // contains all non gold blocks in the current level
+    private ArrayList<Brick> goldBlocks = new ArrayList<Brick>(); // contains all gold blocks in the current level
+    private static ArrayList<Powerup> powerups; // all falling powerup objects
 
-    private Set<Laser> lasersToDelete;
+    private ArrayList<Laser> lasers; // all laser objects on screen
 
-    private ArrayList<Point> explosions;
-    private Set<Brick> blocksToDelete; //blocks that are broken and should be remvoed from blocks
+    private Set<Laser> lasersToDelete; // lasers to remove
+
+    private Set<Brick> blocksToDelete; //blocks that are broken and should be removed from blocks
     private Set<Powerup> powerupsToDelete; //Powerups that are caught and should be removed from powerups
-    private LoadedImages images = new LoadedImages(); //images that are to be used
 
-    private Paddle paddle; //the current paddle
-    private Point mouse, offset;
-    private int points, lives, totalPoints, highScore, startFrame, curLevel, loadFrame;
+    private int points, curLevel; // amount of points the player has, and the level the player is on
 
-    private Level [] levels; //levels[i] stores starting info for the ith level
     private Font fontLocal, fontSys, fontScores; //Font used for text to be drawn on screen
-    private Sound music;
 
-    private boolean start, catching, firstEver, laserActive;
-    private Level one, two;
-    private Level level;
-    private int laserCooldown = 30;
+    private Level level; // the active level
+    private int laserCooldown = 30; // laser cooldown
 
 
-
+    // loading all the stuff
     public GamePanel(){
+        // FONTS
         fontSys = new Font("Montserat", Font.PLAIN, 32);
         try{
             File fntFile = new File("assets/Fonts/pixela-extreme.ttf");
@@ -63,73 +61,72 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             System.out.println(ex);
         }
 
+
+        // restarting game
         gameReset();
 
-
+        // mumbo jumbo that i still dont understand
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
         addMouseListener(this);
-
         addMouseMotionListener(this);
         addMouseListener(this);
-
-
         timer = new Timer(Globals.GAME_SPEED, this);
         timer.start();
         setPreferredSize(new Dimension(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
     }
 
+
+    // the "cheat"
     public void breakDebug() {
         blocks.remove(0);
-    }
+    } // press B to remove a block. for debugging!
 
-
+    // checking collisions between ball and blocks and adding bricks to be removed accordingly
     public void brickCollide() {
         for (int i=0; i<blocks.size(); i++) {
             Brick b = blocks.get(i);
             if (ball.getRect().intersects(b.getRect())) {
                 int bx = ball.getVelX();
                 int by = ball.getVelY();
+                // Mr.McKenzie collide strategy!
                 if (!ball.prevPos(0, by).intersects(b.getRect())) {
-
                     ball.setVelY(ball.getVelY() * -1);
-//                    ball.vy *= -1;
                 }
                 if (!ball.prevPos(ball.getVelX(), 0).intersects(b.getRect())) {
                     ball.setVelX(ball.getVelX() * -1);
                 }
 
-                b.lowerHealth(1);
+                b.lowerHealth(1); // lowers health
                 if (blocks.get(i).getHealth() <= 0){ //if the Block is broken
-                    blocksToDelete.add(blocks.get(i));
+                    blocksToDelete.add(blocks.get(i)); // add to blocks to be removed
                 }
-
             }
         }
+        // collisions for gold blocks but dont remove
         for (int i=0; i<goldBlocks.size(); i++) {
             Brick b = goldBlocks.get(i);
             if (ball.getRect().intersects(b.getRect())) {
                 if (!ball.prevPos(0, ball.getVelY()).intersects(b.getRect())) {
                     ball.setVelY(ball.getVelY() * -1);
-//                    ball.vy *= -1;
                 }
                 if (!ball.prevPos(ball.getVelX(), 0).intersects(b.getRect())) {
                     ball.setVelX(ball.getVelX() * -1);
-                    //                    ball.vx *= -1;
-
                 }
             }
         }
     }
 
+    // pew pew!
     public void fireLaser() {
+        // fires lasers if player has laser powerup
         if (keys[KeyEvent.VK_SPACE]) {
-            if (ball.getOnPad()) {
-//                    ball.setStart(true);
+            if (ball.getOnPad()) { // launch ball if ball is on pad
                 ball.setOnPad(false);
                 ball.launchBall();
             }
+            // else fires two lasers
             else {
                 if (player.getActivePowerup().equals("Laser") && laserCooldown <= 0) {
                     laserCooldown = 30;
@@ -137,40 +134,43 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                     lasers.add(new Laser(player.getX() + player.getWidth()/8*7, player.getY()));
                 }
             }
-//                ball.launchBall();
         }
     }
-    public void laserCollide() {
 
+    // checking collisions of lasers
+    public void laserCollide() {
+        // my very very efficient code!
+
+        // checking all lasers and all blocks
         for (int i=0; i<lasers.size(); i++) {
             Laser l = lasers.get(i);
             for (int j = 0; j < blocks.size(); j++) {
                 Brick b = blocks.get(j);
-
+                // delete delete
                 if (l.getRect().intersects(b.getRect())) {
-
                     lasersToDelete.add(l);
                     blocksToDelete.add(b);
                 }
             }
+            // delete laser but no delete gold block
             for (int q=0; q<goldBlocks.size(); q++) {
                 Brick gb = goldBlocks.get(q);
-
                 if (l.getRect().intersects(gb.getRect())) {
                     lasersToDelete.add(l);
                 }
             }
+            // hits top of screen
             if (l.getY() < 0+Globals.TOP_BORDER_HEIGHT + Globals.BORDER_WIDTH) {
                 lasersToDelete.add(l);
             }
         }
+        // removing lasers
         for (Laser l:lasersToDelete) {
             lasers.remove(l);
-
         }
-
     }
 
+    
     public void powerupCollide() {
         for (int i=0; i<powerups.size(); i++) {
             Powerup p = powerups.get(i);
@@ -271,11 +271,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     public void gameReset() {
         screen = "intro";
         introScreen = Util.loadScaledImg("assets/screens/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-//        menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-        background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         gameoverScreen = Util.loadScaledImg("assets/screens/gameover.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
         winScreen = Util.loadScaledImg("assets/screens/win.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-        menuScreen = new ImageIcon("assets/screens/menu.gif").getImage();
         keys = new boolean[KeyEvent.KEY_LAST+1];
         player = new Paddle();
         ball = new Ball();
