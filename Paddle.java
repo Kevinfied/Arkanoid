@@ -2,7 +2,7 @@
     Paddle.java
     Kevin Xu
 
-
+    Contains all the methods for the paddle object
  */
 
 import java.awt.*;
@@ -10,25 +10,23 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Paddle {
-    private static int x, y;
-    private static int WIDTH = 80;
-    private static int HEIGHT = 20;
-    private static int speed;
+    private static int x, y; // x and y are the coordinates of the top left corner of the paddle
+    private static int WIDTH = 80; // width of the paddle
+    private static int HEIGHT = 20; // height of the paddle
+    private static int speed; // speed of the paddle moved with keyboard
     private static boolean egg; // :)
-    private static String activePowerup;
-    private static int health;
+    private static String activePowerup; // the active powerup
+    private static int health; // health of the paddle
 
-
+    // ICONS
     private Image easterEgg = new ImageIcon("assets/Vaus.png").getImage();
-//    Image icon = Util.loadScaledImg("assets/Vaus/Default.png", WIDTH, HEIGHT);
     private Image lifeIcon = Util.loadScaledImg("assets/Vaus/lives.png", 15, 15);
-//    Image defaultIcon = Util.loadScaledImg("assets/Vaus/Arkanoid_Vaus.gif", WIDTH, HEIGHT);
-
     // all progress is hindered by a GIF 😱😱😱😱😱
-
     // nvm i got it 🎉
     private Image defaultIcon = new ImageIcon("assets/Vaus/default.gif").getImage();
     private Image laserIcon = new ImageIcon("assets/Vaus/laser.gif").getImage();
+
+    // constructor
     public Paddle() {
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
@@ -36,6 +34,8 @@ public class Paddle {
         health = 3;
         activePowerup = "None";
     }
+
+    // updating paddle size for powerups
     public static void powerupUpdate() {
         if (activePowerup == "Enlarge") {
             WIDTH = 120;
@@ -44,7 +44,8 @@ public class Paddle {
             WIDTH = 80;
         }
     }
-    
+
+    // draws the paddle
     public void draw(Graphics g){
         if (egg) {
             g.drawImage(easterEgg, x, y, null);
@@ -57,17 +58,20 @@ public class Paddle {
         }
     }
 
+    // draws the lives on the screen
     public void drawLives(Graphics g) {
         for (int i=0; i<health-1; i++) {
             g.drawImage(lifeIcon, 20 + (i*15), Globals.SCREEN_HEIGHT-15, null);
         }
     }
 
+    // resets the paddle to the center of the screen and cleans powerups
     public void deathReset() {
         x = Globals.SCREEN_WIDTH/2 - (WIDTH/2);
         y = Globals.SCREEN_HEIGHT - 100;
         clearPowerups();
     }
+
 
     public void setSpeed(int s){
         speed = s;
@@ -78,6 +82,8 @@ public class Paddle {
     public void moveRight(){
         x += speed;
     }
+
+    // moving the paddle with the keyboard
     public void move(boolean []keys) {
 
         int leftKey = KeyEvent.VK_LEFT;
@@ -90,13 +96,12 @@ public class Paddle {
             moveLeft();
         }
 
-
         if ((keys[rightKey] || keys[rightD]) && (x + (speed/2) < Globals.SCREEN_WIDTH - WIDTH - Globals.BORDER_WIDTH-2)) {
             moveRight();
         }
-
-
     }
+
+
 
     public Rectangle getRect(){
         // x, y, width, height
@@ -153,8 +158,8 @@ public class Paddle {
 
     public static void setPowerup(String s) {
     	activePowerup = s;
-        System.out.println("Powerup: " + activePowerup);
-        System.out.println("Health: " + health);
+//        System.out.println("Powerup: " + activePowerup);
+//        System.out.println("Health: " + health);
     }
 
     public static String getActivePowerup() {

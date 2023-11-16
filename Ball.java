@@ -2,7 +2,9 @@
 	Ball.java
 	Kevin Xu
 
-
+	Contains all the methods for the ball object (i think)
+	Has bounce, move, and draw methods
+	and a bunch of others that took me way too long to figure out
  */
 
 
@@ -12,58 +14,45 @@ import javax.swing.*;
 
 
 public class Ball {
-	private static int x,y;
-//	private static double vx,vy;
-	private static int vx, vy;
+	// forgot about access protection 😧
+	private static int x,y; // x and y are the coordinates of the center of the ball
+	private static int vx, vy; // vx and vy are the velocities of the ball
 
-	private static final int WIDTH = 12, HEIGHT = 12;
-	private static final int RADIUS = WIDTH/2;
+	private static final int WIDTH = 12, HEIGHT = 12; // width and height of the ball
+	private static final int RADIUS = WIDTH/2; // radius of the ball
+	private static boolean start; // start is true when the ball is on the paddle
+	private static boolean onPad; // if the ball is on the paddle
+	private static boolean slowing; // if the ball is slowing down (slow powerup)
+	private static int slowTimer = 0; // timer for slow powerup
+	private static int slowCounter = 0; // number of slow powerups used
 
-	private static double paddleBounce = 0;
+	// fixed them :)
 
-	private static boolean start;
-	private static boolean onPad, stick;
-	private static boolean slowing;
-	private static int slowTimer = 0;
-	private static int slowCounter = 0;
-	private int stickDist;
+	// border is 27 pixels wide - Past kevin
 
-	// border is 27 pixels wide
+	Image r = new ImageIcon("assets/Vaus.png").getImage(); // egg
 
-	Image r = new ImageIcon("assets/Vaus.png").getImage();
+	// constructor
     public Ball() {
 		startPos();
 		onPad = true;
     }
 
-	public void startBall() {
-
-		onPaddle();
-
-		if (start) {
-			vx = Util.randInt(-5, 5);
-			vy = -5;
-			start = false;
-		}
-	}
-
-
-
+	// launches the ball from paddle with a random velocity
 	public void launchBall() {
 		vx = Util.randInt(-5, 5);
 		vy = -5;
-//		vx = 0;
 		start = false;
 		onPad = false;
 	}
 
+	// wall bounces
     public void wallBounce() {
 		int var = 3; // small offset from the top border
 		if(y<=0+Globals.BORDER_WIDTH+var+Globals.TOP_BORDER_HEIGHT){ // bounces off the top wall
 			y = Globals.BORDER_WIDTH+1+var+Globals.TOP_BORDER_HEIGHT;
 			vy*=-1;
 		}
-
 		// bounces off side walls
 		if(x<=0+Globals.BORDER_WIDTH || x>=Globals.SCREEN_WIDTH-WIDTH-Globals.BORDER_WIDTH){ // bounces off the left and right walls.
 			if (x <= 0 + Globals.BORDER_WIDTH) {
@@ -74,49 +63,42 @@ public class Ball {
 			}
 			vx*=-1;
 		}
-
 	}
 
+	// checking if the ball goes below the paddle.
 	public boolean deathCheck(Paddle player) {
 		if (y>=Globals.SCREEN_HEIGHT) {
+			// resetting ball and making it stick to paddle
 			startPos();
 			Paddle.loseHealth();
 			onPad = true;
-			player.deathReset();
+			player.deathReset(); // also resets the player position and powerups
 			return true;
 		}
 		return false;
 	}
 
+	// starting position
 	public void startPos() {
 		x = Globals.SCREEN_WIDTH / 2;
 		y = Paddle.getY() - RADIUS;
-
-		System.out.println(y);
 		vx = 0;
 		vy = 0;
 	}
 
-	public int ballDir(){
-		if(vx<0){
-			return 0;
-		}
-		if(vx>0){
-			return 1;
-		}
-		return 2;
-	}
-
-
+	// paddle bounce
 	public void paddleBounce(Paddle play) {
+		// this took way too long ;-;
+		// i think i lost half of my hair doing this
 		Rectangle ball = getRect();
 		// bouncing off the paddle
 		if (ball.intersects(play.getRect())) {
 			if(!prevBallY().intersects(play.getRect())){
-
+				// bunch of math that i already forget
+				// just kidding. just taking the x distance of ball to center and doing some
+				// magic with it
 				double distFromCenter = (x - (play.getX()+play.getWidth()/2));
 				double speed = Math.pow(vy, 2) + Math.pow(vx, 2);
-
 
 				double newVx = vx+(distFromCenter/15);
 				System.out.println("dist" + distFromCenter);
@@ -147,76 +129,57 @@ public class Ball {
 			}
 			else {
 				if(!prevBallX().intersects(play.getRect())) {
-					vx *= -1; //switching x velocity just in case
+					vx *= -1; //switching x velocity just in case ball wants to be wacky
 				}
 			}
 		}
 	}
+
+	// MOVE
     public void move(){
 		// moving
 		if (onPad) {
 			onPaddle();
 		}
-		else if (stick) {
-			stick(stickDist);
-		}
 		else {
 			x += vx;
 			y += vy;
 		}
-		System.out.printf("vx: %d, vy: %d\n", vx, vy);
-
+//		System.out.printf("vx: %d, vy: %d\n", vx, vy);
 	}
 
-
+	// STICK TO PADDLE
 	public void onPaddle() {
 		x = Paddle.getX() + Paddle.getWidth()/2;
 		y = Paddle.getY() - RADIUS;
 	}
 
-	public void stick(int dist) {
-		x = Paddle.getX() + dist;
-		y = Paddle.getY() - RADIUS;
-	}
 
 
-	public void reset() {
-		x = Globals.SCREEN_WIDTH/2;
-		y = Globals.SCREEN_HEIGHT/2;
-		vx = 3;
-		vy = 3;
-
-	}
-
+	// jerry told me to put this here so im going to leave it here
 	public double derivatives(double num) {
-
 		return 0.0;
 	}
 
+	// returns the previous position of the ball
 	public Rectangle prevPos(int velX, int velY) {
-
 		return new Rectangle(x-velX-(WIDTH/2), y-velY-(HEIGHT/2), WIDTH, HEIGHT);
-
 	}
-	public Rectangle prevBallX(){//ball if you minus ball x velocity
+	public Rectangle prevBallX(){
 		return new Rectangle(x-RADIUS-vx,y-RADIUS,WIDTH,HEIGHT);
 	}
-
-
-	public Rectangle prevBallY(){//ball if you minus ball y velocity
+	public Rectangle prevBallY(){
 		return new Rectangle(x-RADIUS,y-RADIUS-vy,WIDTH,HEIGHT);
 	}
+
 
 	// get rect
 	public Rectangle getRect(){
 		return new Rectangle(x-(WIDTH/2),y-(HEIGHT/2), WIDTH, HEIGHT);
-		// return new Rectangle(x-3,y-3,6,6);
 	}
 
-
-	// draws the ball
+	// draws the ball. nothing to see here
     public void draw(Graphics g){
-
 		if (Paddle.getEgg()) {
 			g.drawImage(r, x, y, null);
 		}
@@ -226,6 +189,7 @@ public class Ball {
 		}
     }
 
+	// Slow powerup
 	public void slowPowerup() {
 		slowing = true;
 		slowTimer += 1000;
@@ -250,6 +214,7 @@ public class Ball {
 		}
 	}
 
+	// slow powerup timer
 	public void slowTimer() {
 		if (slowTimer > 0) {
 			slowTimer--;
@@ -263,6 +228,7 @@ public class Ball {
 		}
 	}
 
+	// resets speed after slow powerup
 	public static void resetSpeed(int counter) {
 		vx /= Math.pow(0.7, counter);
 		vy /= Math.pow(0.7, counter);
@@ -278,49 +244,42 @@ public class Ball {
 		else {
 			vy++;
 		}
-		System.out.printf("vx: %d, vy: %d\n", vx, vy);
+//		System.out.printf("vx: %d, vy: %d\n", vx, vy);
 	}
 
+	// clears all powerups
 	public static void clearPowerups() {
-		resetSpeed(slowCounter);
-		stick = false;
+		resetSpeed(slowCounter); // resets speed if slow powerup was active
 		slowing = false;
 		slowTimer = 0;
 		slowCounter = 0;
-
 	}
 
+
+	// static methods.
 	public static int getX() {
 		return x;
 	}
-
 	public static int getY() {
 		return y;
 	}
-
 	public static int getVelX() {
 		return vx;
 	}
-
 	public static int getVelY() {
 		return vy;
 	}
-
 	public static void setVelX(int n) {
 		vx = n;
 	}
-
 	public static void setVelY(int n) {
 		vy = n;
 	}
-
 	public boolean getOnPad() {
 		return onPad;
 	}
-
 	public void setOnPad(boolean n) {
 		onPad = n;
 	}
-
 }
 

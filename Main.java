@@ -1,3 +1,12 @@
+/*
+    Main.java
+    Kevin Xu
+
+    THE MAIN FILE. RUN THIS FILE.
+    also please read the Readme
+ */
+
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,11 +23,8 @@ public class Main extends JFrame {
         setVisible(true);
     }
 
-
-    
     public static void main(String[] arguments) {
         new Main();
-//        Main frame = new Main();
         System.out.println("RUNNING");
     }
 }

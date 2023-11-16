@@ -170,7 +170,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
     }
 
-    
+    // checking collisions of powerups on paddle
     public void powerupCollide() {
         for (int i=0; i<powerups.size(); i++) {
             Powerup p = powerups.get(i);
@@ -180,10 +180,11 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
     }
 
-
+    // deleting blocks and adding block value to player points
     public void deleteBlocks(){
         for (Brick b : blocksToDelete){
             points += b.getPoints();
+            // also randomly dropping powerups
             if (Util.randInt(0, 2) == 1) {
                 powerups.add(new Powerup(b.getX() + ((b.getWidth() - Powerup.getWidth())/2), b.getY()+b.getHeight()));
             }
@@ -192,6 +193,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         blocksToDelete.clear();
     }
 
+    // removing powerups and adding powerup effects to player
     public void deletePowerups() {
         for (Powerup p : powerupsToDelete) {
             if (p.getType().equals("Player")) {
@@ -209,6 +211,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         powerupsToDelete.clear();
     }
 
+    // moving to next level
     public void progression() {
         if (blocks.size() == 0) {
             if (curLevel+1 <= 2) {
@@ -220,26 +223,23 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
                 for (Brick e : level.getBlocks()) {
                     blocks.add(e);
                 }
-
                 for (Brick e : level.getGoldBlocks()) {
                     goldBlocks.add(e);
                 }
-
                 powerups.clear();
                 lasers.clear();
             }
             else {
                 curLevel = 3;
             }
-
         }
     }
 
 
+    // all the moving stuff
     public void move(){
         if(screen == "intro"){
         }
-
         else if(screen == "game"){
             player.move(keys);
             ball.move();
@@ -247,7 +247,6 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             if (ball.deathCheck(player)) {
                 powerups.clear();
             }
-//            ball.deathCheck(player);
             ball.paddleBounce(player);
             for (Powerup pu : powerups) {
                 pu.move();
@@ -258,16 +257,17 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
     }
 
+    // checks player has lost all health or player has reached "level 3"
     public void checkGameOver() {
         if (player.getHealth() <= 0) {
             screen = "Game Over";
         }
         if (curLevel == 3) {
-//            System.out.println("win");
             screen = "Win";
         }
     }
 
+    // resets game
     public void gameReset() {
         screen = "intro";
         introScreen = Util.loadScaledImg("assets/screens/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
@@ -295,44 +295,26 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         blocksToDelete = new HashSet<>();
         powerupsToDelete = new HashSet<>();
         lasersToDelete = new HashSet<>();
-//        curLevel = 1;
-//        player.deathReset();
-//        ball.setOnPad(true);
-//        ball.startPos();
-//        level = new Level(curLevel);
-//        for (Brick e : level.getBlocks()) {
-//            blocks.add(e);
-//        }
-//
-//        for (Brick e : level.getGoldBlocks()) {
-//            goldBlocks.add(e);
-//        }
-//
-//        powerups.clear();
-//        lasers.clear();
-//        screen = "intro";
-//        points = 0;
-
-
     }
 
-
+    // key press
     public void	keyPressed(KeyEvent e){
         int code = e.getKeyCode();
         keys[code] = true;
 
         if (screen == "game") {
-            if (code == KeyEvent.VK_8) {
+            if (code == KeyEvent.VK_8) { // debug?
                 player.setEgg(true);
             }
-            if (code == KeyEvent.VK_B) {
+            if (code == KeyEvent.VK_B) { // debug
                 breakDebug();
             }
-            if (code == KeyEvent.VK_L) {
+            if (code == KeyEvent.VK_L) { // debug
                 Paddle.setPowerup("Laser");
             }
         }
     }
+
     public void	keyReleased(KeyEvent e){
         int code = e.getKeyCode();
         keys[code] = false;		
@@ -345,6 +327,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
     public void	mouseExited(MouseEvent e){}
 
+    // mouse press
     public void	mousePressed(MouseEvent e){
         System.out.println("HERE");
         System.out.println(points);
@@ -352,6 +335,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             screen = "game";
         }
 
+        // on gameover screen and win screen, start new game
         if (screen == "Game Over") {
             gameReset();
         }
@@ -364,12 +348,16 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     @Override
     public void mouseMoved(MouseEvent e) {}
 
+
+    // MOVING PLAYER WITH MOUSE!!!!
     public void mouseDragged(MouseEvent e) {
         if (screen == "game") {
             player.setX(e.getX()-player.getWidth()/2);
         }
     }
 
+
+    // all updates
     public void	actionPerformed(ActionEvent e){
         move();
         brickCollide();
@@ -385,37 +373,30 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         repaint();
     }
 
-
+    // drawing all the stuff
     @Override
     public void paint(Graphics g){
-
         if(screen == "intro"){
             g.drawImage(introScreen,0,0,null);
         }
-
 
         else if(screen == "game"){
             g.setColor(new Color(0,0,0));
             g.fillRect(0,0,Globals.SCREEN_WIDTH,Globals.SCREEN_HEIGHT);
             Image background = level.getBackground();
             g.drawImage(background, 0, Globals.TOP_BORDER_HEIGHT, null);
-
             for (Brick FR: blocks) {
                 FR.draw(g);
             }
-
             for (Brick FR: goldBlocks) {
                 FR.draw(g);
             }
-
             for (Powerup pu : powerups) {
                 pu.draw(g);
             }
-
             for (Laser l : lasers) {
                 l.draw(g);
             }
-
             ball.draw(g);
             player.draw(g);
             player.drawLives(g);
@@ -437,7 +418,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
             g.drawImage(winScreen, 0, 0,null);
             g.setColor(Color.WHITE);
             g.setFont(fontScores);
-            g.drawString(""+points, Globals.SCREEN_WIDTH/2-75, 450);
+                                        // extra health gets turned into points!
+            g.drawString(""+(points + (player.getHealth() * 200)), Globals.SCREEN_WIDTH/2-75, 450);
         }
     }
 }

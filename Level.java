@@ -1,3 +1,10 @@
+/*
+    * Level.java
+    * Kevin Xu
+    *
+    * Contains all the methods for the level object
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -6,25 +13,26 @@ import java.util.Arrays;
 
 public class Level {
 
-    private int totalPoints;
+    private int totalPoints; // total points in the level. i dont think this was actually used but im scared to break something
 
-    private int lives;
+    private int lives; // also not used
 
-    private static int level;
-    private ArrayList<Brick> blocks;
-    private ArrayList<Brick> goldBlocks;
+    private static int level; // level number
+    private ArrayList<Brick> blocks; // arraylist of all the blocks in the level
+    private ArrayList<Brick> goldBlocks; // arraylist of all the gold blocks in the level
 
-    private Image background;
+    private Image background; // background image of the level
 
-    private int pointsToClear;
+    private int pointsToClear; // points needed to clear the level. not used
     private Image lvl1Background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT-Globals.TOP_BORDER_HEIGHT);
     private Image lvl2Background = Util.loadScaledImg("assets/backgrounds/background2.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT-Globals.TOP_BORDER_HEIGHT);
-    public Level (int lvl) {
 
+    // constructor
+    public Level (int lvl) {
         blocks = new ArrayList<Brick>();
         goldBlocks = new ArrayList<Brick>();
 
-
+        // LEVEL ONE
         if (lvl == 1) {
             level = 1;
             lives = 3;
@@ -42,6 +50,7 @@ public class Level {
                 blocks.add(new Brick(i * 40 - 20, 175 + Globals.TOP_BORDER_HEIGHT, 40, 20, "Green"));
             }
         }
+        // LEVEL TWO
         if (lvl == 2) {
             level = 2;
             lives = 3;
@@ -87,7 +96,7 @@ public class Level {
 
 
         }
-        if (lvl == 99) {
+        if (lvl == 99) { // leaving this here for future kevin to finish
             // secret level :)
             level = 99;
         }
@@ -121,6 +130,8 @@ public class Level {
         return background;
     }
 
+
+    // not used
     public void drawLevel(Graphics g, Ball ball, Paddle player) {
 
         g.setColor(new Color(0,0,0));

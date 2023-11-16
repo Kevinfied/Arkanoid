@@ -18,5 +18,8 @@ There are also a couple of easter eggs. If something looks like a bug its probab
 <br />
 <br />
 
-
+edit:
+updated Main.java<br />
+<br />
+some very self explanatory methods were not commented.
 
