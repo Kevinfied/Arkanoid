@@ -98,73 +98,63 @@ public class Ball {
 		}
 		return 2;
 	}
-	public int paddlePos(Paddle p1){
-		if(x > p1.getX()+40){
-			return 2;
-		}
-		if(x > p1.getX()+20){
-			return 1;
-		}
-		if(x > p1.getX()){
-			return 0;
-		}
-		return 3;
-	}
+//	public int paddlePos(Paddle p1){
+//		if(x > p1.getX()+p1.getWidth()/3*2){
+//			return 2;
+//		}
+//		if(x > p1.getX()+p1.getWidth()/3 && x < p1.getX()+p1.getWidth()/3){
+//			return 1;
+//		}
+//		if(x > p1.getX()){
+//			return 0;
+//		}
+//		return 3;
+//	}
+
 
 	public void paddleBounce(Paddle play) {
 		Rectangle ball = getRect();
 		// bouncing off the paddle
 		if (ball.intersects(play.getRect())) {
-			if(! prevBallY().intersects(play.getRect())){
-				if(ballDir() == 0){
-					if(paddlePos(play) == 0){
-						vx *= 1.5;
-						vy *= 1.25;
+			if(!prevBallY().intersects(play.getRect())){
 
-					}
-					if(paddlePos(play) == 2){
-						vx *= 0.5;
-						vy *= 0.25;
-					}
+				double distFromCenter = (x - (play.getX()+play.getWidth()/2));
+				double speed = Math.pow(vy, 2) + Math.pow(vx, 2);
+
+
+				double newVx = vx+(distFromCenter/15);
+				System.out.println("dist" + distFromCenter);
+				System.out.println(newVx);
+				double newVy = Math.sqrt(speed - Math.pow(newVx, 2)) * -1;
+
+				vx = (int)Math.round(newVx);
+				if ((int)Math.round(newVy) != 0) {
+					vy = (int)Math.round(newVy);
 				}
-				if(ballDir() == 1){
-					if(paddlePos(play) == 0){
-						vx *= 0.5;
-						vy *= 0.25;
-					}
-					if(paddlePos(play) == 2){
-						vx *= 1.5;
-						vy *= 1.25;
-					}
-
+				else {
+					vy = -1;
 				}
-				vy*=-1;//switching y velocity
-			}
 
-//			double speed = Math.pow(vx, 2) + Math.pow(vy, 2);
-//			if (!prevPos(0, vy).intersects(play.getRect())) {
-//
-//				if (x < play.getX() + play.getWidth()/2) {
-//					vx = -1 * (int) (speed - Math.pow(vy, 2));
-//				}
-//				else {
-//					vx = (int) (speed - Math.pow(vy, 2));
-//				}
-//				vy *= -1;
-//			}
-//
-//
-//			if (!prevPos(vx, 0).intersects(play.getRect())) {
-////				if (x < play.getX() + play.getWidth()/2) {
-////					vx = -1 * (int) (speed - Math.pow(vy, 2));
-////				}
-////				else {
-////					vx = (int) (speed - Math.pow(vy, 2));
-////				}
-//				vx *= -1;
+				if (vx > 10) {
+					vx = 10;
+				}
+				else if (vx < -10) {
+					vx = -10;
+				}
+				if (vy > 10) {
+					vy = 10;
+				}
+				else if (vy < -10) {
+					vy = -10;
+				}
 
 			}
-
+			else {
+				if(!prevBallX().intersects(play.getRect())) {
+					vx *= -1; //switching x velocity just in case
+				}
+			}
+		}
 	}
     public void move(){
 		// moving
@@ -178,13 +168,12 @@ public class Ball {
 			x += vx;
 			y += vy;
 		}
+		System.out.printf("vx: %d, vy: %d\n", vx, vy);
+
 	}
 
 
 	public void onPaddle() {
-		// gotta check for the sticking powerup later
-
-
 		x = Paddle.getX() + Paddle.getWidth()/2;
 		y = Paddle.getY() - RADIUS;
 	}
@@ -249,15 +238,19 @@ public class Ball {
 			vx = vx;
 		}
 		else {
-			vx *= 0.7;
-			if (vx < 1 && vx > -1) {
-				vx = 1;
+			double newVx = vx * 0.7;
+
+			if (newVx < 1 && newVx > -1) {
+				vx = (int)Math.round(newVx);
 			}
 		}
-		vy *= 0.7;
+		double newVy = vy * 0.7;
 
-		if (vy < 1 && vy > -1) {
-			vy = 1;
+		if ((int)Math.round(newVy) == 0) {
+			vy = vy;
+		}
+		else {
+			vy = (int)Math.round(newVy);
 		}
 	}
 
