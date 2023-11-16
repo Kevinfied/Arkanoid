@@ -14,7 +14,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     private Ball ball;
     private boolean []keys;
 
-    private Image menu, background, gameoverScreen, winScreen;
+    private Image menu, background, gameoverScreen, winScreen, introScreen, menuScreen;
 
     private Paddle player;
     int score1, score2;
@@ -39,7 +39,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     private int points, lives, totalPoints, highScore, startFrame, curLevel, loadFrame;
 
     private Level [] levels; //levels[i] stores starting info for the ith level
-    private Font fontLocal, fontSys; //Font used for text to be drawn on screen
+    private Font fontLocal, fontSys, fontScores; //Font used for text to be drawn on screen
     private Sound music;
 
     private boolean start, catching, firstEver, laserActive;
@@ -54,6 +54,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         try{
             File fntFile = new File("assets/Fonts/pixela-extreme.ttf");
             fontLocal = Font.createFont(Font.TRUETYPE_FONT, fntFile).deriveFont(32f);
+            fontScores = Font.createFont(Font.TRUETYPE_FONT, fntFile).deriveFont(60f);
         }
         catch(IOException ex){
             System.out.println(ex);
@@ -61,28 +62,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         catch(FontFormatException ex){
             System.out.println(ex);
         }
-        screen = "intro";
-        menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-        background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-        gameoverScreen = Util.loadScaledImg("assets/screens/gameover.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-        winScreen = Util.loadScaledImg("assets/screens/win.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
-        keys = new boolean[KeyEvent.KEY_LAST+1];
-        player = new Paddle();
-        ball = new Ball();
-        powerups = new ArrayList<Powerup>();
-        lasers = new ArrayList<Laser>();
-        curLevel = 1;
-        level = new Level(curLevel);
-        for (Brick e : level.getBlocks()) {
-            blocks.add(e);
-        }
 
-        for (Brick e : level.getGoldBlocks()) {
-            goldBlocks.add(e);
-        }
-        blocksToDelete = new HashSet<>();
-        powerupsToDelete = new HashSet<>();
-        lasersToDelete = new HashSet<>();
+        gameReset();
 
 
         setFocusable(true);
@@ -287,6 +268,57 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         }
     }
 
+    public void gameReset() {
+        screen = "intro";
+        introScreen = Util.loadScaledImg("assets/screens/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+//        menu = Util.loadScaledImg("assets/intro.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        background = Util.loadScaledImg("assets/backgrounds/background1.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        gameoverScreen = Util.loadScaledImg("assets/screens/gameover.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        winScreen = Util.loadScaledImg("assets/screens/win.png", Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT);
+        menuScreen = new ImageIcon("assets/screens/menu.gif").getImage();
+        keys = new boolean[KeyEvent.KEY_LAST+1];
+        player = new Paddle();
+        ball = new Ball();
+        powerups = new ArrayList<Powerup>();
+        lasers = new ArrayList<Laser>();
+        curLevel = 1;
+        level = new Level(curLevel);
+        points = 0;
+        blocks.clear();
+        powerups.clear();
+        goldBlocks.clear();
+        lasers.clear();
+        for (Brick e : level.getBlocks()) {
+            blocks.add(e);
+        }
+
+        for (Brick e : level.getGoldBlocks()) {
+            goldBlocks.add(e);
+        }
+        blocksToDelete = new HashSet<>();
+        powerupsToDelete = new HashSet<>();
+        lasersToDelete = new HashSet<>();
+//        curLevel = 1;
+//        player.deathReset();
+//        ball.setOnPad(true);
+//        ball.startPos();
+//        level = new Level(curLevel);
+//        for (Brick e : level.getBlocks()) {
+//            blocks.add(e);
+//        }
+//
+//        for (Brick e : level.getGoldBlocks()) {
+//            goldBlocks.add(e);
+//        }
+//
+//        powerups.clear();
+//        lasers.clear();
+//        screen = "intro";
+//        points = 0;
+
+
+    }
+
 
     public void	keyPressed(KeyEvent e){
         int code = e.getKeyCode();
@@ -322,6 +354,13 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
         if(screen == "intro") {
             screen = "game";
         }
+
+        if (screen == "Game Over") {
+            gameReset();
+        }
+        if (screen == "Win") {
+            gameReset();
+        }
     }
     public void	mouseReleased(MouseEvent e) {}
 
@@ -354,8 +393,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
     public void paint(Graphics g){
 
         if(screen == "intro"){
-            g.drawImage(menu,0,0,null);
+            g.drawImage(introScreen,0,0,null);
         }
+
 
         else if(screen == "game"){
             g.setColor(new Color(0,0,0));
@@ -385,15 +425,22 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
 
 
             g.setFont(fontLocal);
-            g.drawString("Score: " + points, 20, 50);
+            g.drawString("Score: " + points, 20, 60);
+            g.drawString("Level: " + curLevel, 450, 60);
         }
 
         else if (screen == "Game Over") {
             g.drawImage(gameoverScreen, 0, 0, null);
+            g.setColor(Color.WHITE);
+            g.setFont(fontScores);
+            g.drawString(""+points, Globals.SCREEN_WIDTH/2-75, 400);
         }
 
         else if (screen == "Win") {
             g.drawImage(winScreen, 0, 0,null);
+            g.setColor(Color.WHITE);
+            g.setFont(fontScores);
+            g.drawString(""+points, Globals.SCREEN_WIDTH/2-75, 450);
         }
     }
 }

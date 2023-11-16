@@ -68,19 +68,7 @@ public class Ball {
 		}
 
 	}
-	
-	public int ballDirection() {
-		if (vx < 0) {
-			return 1;
-		}
-		if (vx > 0) {
-			return 2;
-		}
-		else {
-			return 3;
-		}
-	}
-	
+
 	public boolean deathCheck(Paddle player) {
 		if (y>=Globals.SCREEN_HEIGHT) {
 			startPos();
@@ -101,41 +89,82 @@ public class Ball {
 		vy = 0;
 	}
 
+	public int ballDir(){
+		if(vx<0){
+			return 0;
+		}
+		if(vx>0){
+			return 1;
+		}
+		return 2;
+	}
+	public int paddlePos(Paddle p1){
+		if(x > p1.getX()+40){
+			return 2;
+		}
+		if(x > p1.getX()+20){
+			return 1;
+		}
+		if(x > p1.getX()){
+			return 0;
+		}
+		return 3;
+	}
+
 	public void paddleBounce(Paddle play) {
 		Rectangle ball = getRect();
 		// bouncing off the paddle
 		if (ball.intersects(play.getRect())) {
-			double speed = Math.pow(vx, 2) + Math.pow(vy, 2);
-			if (!prevPos(0, vy).intersects(play.getRect())) {
+			if(! prevBallY().intersects(play.getRect())){
+				if(ballDir() == 0){
+					if(paddlePos(play) == 0){
+						vx *= 1.5;
+						vy *= 1.25;
 
-				if (x < play.getX() + play.getWidth()/2) {
-					vx = -1 * (int) (speed - Math.pow(vy, 2));
+					}
+					if(paddlePos(play) == 2){
+						vx *= 0.5;
+						vy *= 0.25;
+					}
 				}
-				else {
-					vx = (int) (speed - Math.pow(vy, 2));
+				if(ballDir() == 1){
+					if(paddlePos(play) == 0){
+						vx *= 0.5;
+						vy *= 0.25;
+					}
+					if(paddlePos(play) == 2){
+						vx *= 1.5;
+						vy *= 1.25;
+					}
+
 				}
-				vy *= -1;
+				vy*=-1;//switching y velocity
 			}
 
-
-			if (!prevPos(vx, 0).intersects(play.getRect())) {
+//			double speed = Math.pow(vx, 2) + Math.pow(vy, 2);
+//			if (!prevPos(0, vy).intersects(play.getRect())) {
+//
 //				if (x < play.getX() + play.getWidth()/2) {
 //					vx = -1 * (int) (speed - Math.pow(vy, 2));
 //				}
 //				else {
 //					vx = (int) (speed - Math.pow(vy, 2));
 //				}
-				vx *= -1;
+//				vy *= -1;
+//			}
+//
+//
+//			if (!prevPos(vx, 0).intersects(play.getRect())) {
+////				if (x < play.getX() + play.getWidth()/2) {
+////					vx = -1 * (int) (speed - Math.pow(vy, 2));
+////				}
+////				else {
+////					vx = (int) (speed - Math.pow(vy, 2));
+////				}
+//				vx *= -1;
+
 			}
 
-		}
-		if (Paddle.getActivePowerup() == "Catch") {
-			stick = true;
-			stickDist = x - Paddle.getX();
-		}
-		else {
-			stick = false;
-		}
 	}
     public void move(){
 		// moving
@@ -183,6 +212,14 @@ public class Ball {
 
 		return new Rectangle(x-velX-(WIDTH/2), y-velY-(HEIGHT/2), WIDTH, HEIGHT);
 
+	}
+	public Rectangle prevBallX(){//ball if you minus ball x velocity
+		return new Rectangle(x-RADIUS-vx,y-RADIUS,WIDTH,HEIGHT);
+	}
+
+
+	public Rectangle prevBallY(){//ball if you minus ball y velocity
+		return new Rectangle(x-RADIUS,y-RADIUS-vy,WIDTH,HEIGHT);
 	}
 
 	// get rect

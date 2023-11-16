@@ -90,6 +90,7 @@ public class Paddle {
             moveLeft();
         }
 
+
         if ((keys[rightKey] || keys[rightD]) && (x + (speed/2) < Globals.SCREEN_WIDTH - WIDTH - Globals.BORDER_WIDTH-2)) {
             moveRight();
         }
